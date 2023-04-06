@@ -1,10 +1,9 @@
 # Table of contents
 
-* [Welcome to Exostellar Docs!](README.md)
+* [Meet Exostellar!](README.md)
 
 ## Overview
 
-* [Who We Are](overview/who-we-are.md)
 * [Our Products](overview/our-products/README.md)
   * [X-Spot](overview/our-products/x-spot/README.md)
     * [CLI](overview/our-products/x-spot/cli.md)

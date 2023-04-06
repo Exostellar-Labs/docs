@@ -14,15 +14,15 @@ You are also welcome to join our **Slack Community** to talk directly to one of 
 
 Please feel free to follow us on these platforms:
 
-* ****[**LinkedIn**](https://www.linkedin.com/company/exostellar/)****
-* ****[**Twitter**](https://mobile.twitter.com/exostellarcloud)
-* ****[**Youtube**](https://www.youtube.com/@exostellar)****
+* [**LinkedIn**](https://www.linkedin.com/company/exostellar/)
+* [**Twitter**](https://mobile.twitter.com/exostellarcloud)
+* [**Youtube**](https://www.youtube.com/@exostellar)
 
 Join our Newsletter [**here**](https://exostellar.io/contact-us/)!
 
 
 
-Call us: [**+1 607-218-5948**](tel:607-218-5948)****
+Call us: [**+1 607-218-5948**](tel:607-218-5948)
 
 Mail us:
 

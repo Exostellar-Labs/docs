@@ -1,2 +1,0 @@
-# Who We Are
-
