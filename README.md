@@ -19,6 +19,10 @@ In a time of uncertainty, we want to empower you to do more with every dollar yo
 ## Key Features
 
 * **Plug-and-Play Package**: no modifications to your code are needed, install and configure within minutes, and optimizations start automatically.
+* **Customization**: our solutions architects will work with you to set up your desired environments and workloads with no additional costs.
 * **Savings Report**: a detailed usages and savings report will be generated timely.
 * **No Upfront Cost**: you won't need to pay a cent if you are not saved on the costs.
 
+## Quick Start
+
+Please follow the [Quick Start](installation-and-configuration/quick-start.md) guide to get X-Spot running and start saving!

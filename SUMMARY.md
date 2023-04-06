@@ -2,19 +2,9 @@
 
 * [Meet Exostellar!](README.md)
 
-## Overview
-
-* [Our Products](overview/our-products/README.md)
-  * [X-Spot](overview/our-products/x-spot/README.md)
-    * [CLI](overview/our-products/x-spot/cli.md)
-    * [Controller](overview/our-products/x-spot/controller.md)
-    * [Worker](overview/our-products/x-spot/worker.md)
-    * [Advisor Service](overview/our-products/x-spot/advisor-service.md)
-  * [Supported Systems](overview/our-products/supported-systems.md)
-* [Onboarding Process](overview/onboarding-process.md)
-
 ## Installation and Configuration
 
+* [Quick Start](installation-and-configuration/quick-start.md)
 * [Getting Started](installation-and-configuration/getting-started.md)
 * [Self-Installation](installation-and-configuration/self-installation.md)
 * [Install through AWS Marketplace](installation-and-configuration/install-through-aws-marketplace.md)
@@ -22,7 +12,11 @@
 
 ## Architecture
 
-* [X-Spot](architecture/x-spot.md)
+* [X-Spot](architecture/x-spot/README.md)
+  * [CLI](architecture/x-spot/cli.md)
+  * [Controller](architecture/x-spot/controller.md)
+  * [Worker](architecture/x-spot/worker.md)
+  * [Advisor Service](architecture/x-spot/advisor-service.md)
 * [Security](architecture/security.md)
 * [Monitoring](architecture/monitoring.md)
 
