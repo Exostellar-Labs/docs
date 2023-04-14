@@ -70,3 +70,4 @@
 ```
 
 </details>
+3. Go to [Identity and Access Management (IAM) > Roles](https://us-east-1.console.aws.amazon.com/iamv2/home#/roles) and click Create role.
