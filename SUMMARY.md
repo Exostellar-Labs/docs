@@ -10,6 +10,10 @@
 * [Install through AWS Marketplace](installation-and-configuration/install-through-aws-marketplace.md)
 * [Auto-Scaling and Orchestration](installation-and-configuration/auto-scaling-and-orchestration.md)
 
+## Use Cases
+
+* [Blockchain Validator](use-cases/blockchain-validator.md)
+
 ## Architecture
 
 * [X-Spot](architecture/x-spot/README.md)
