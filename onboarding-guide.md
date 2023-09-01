@@ -996,6 +996,710 @@ Rolling upgrades or swing migrations make a lot of sense in large environments w
   * Regardless of your approach, (serial replacements or parallel replacements), it would be considered best practice to move through the upgrade process on a single X-Spot controller and fully validate it before moving on to address upgrades in the rest of the fleet of X-Spot controllers.
   * As noted above, and depending on the scale of the upgrade, [creating an AMI](#cluster-deployment) may be an efficient way forward.
 
+[Back to Top](#onboarding-guide)
 
+_______
+
+# AGE and qsub
+
+- [X-Spot Integration for Altair Grid Engine](#age-qsub)
+  - [1. Prerequisites](#1-prerequisites)
+  - [2. AGE Configuration Modifications](#2-age-configuration-modifications)
+  - [3. qsub Wrapper Configuration](#3-qsub-wrapper-configuration)
+- [X-Spot Integration via JSV for Altair Grid Engine](#age-jsv)
+
+___
+
+## 1. Prerequisites
+
+  1. A fully functional Altair Grid Engine installation is required.
+  1. Sufficient privileges to modify the Grid Engine configuration will be required.
+
+___
+
+## 2. AGE Configuration Modifications
+
+  1. Assumptions about AGE configuration as a key to steps below:
+     - The Master Host is represented below as `head`.
+     - A single Execution Host is referenced below as `n011`, and it is a stand-in for all X-Spot controllers that will be participate in the Altair Grid Engine configuration.
+  1. Add queue `xspot`.
+     - difference between deafult all.q and xspot:
+       * qname
+         - `xspot` instead of `all.q`
+       * hostlist
+         - `n011` instead of `@allhosts`
+       * slots
+         - `1,[n011=50]" instead of `1,[n011=<num_cpus>],[head=2]"
+         > **NOTE:**
+         >
+         >   Some testing is recommended for your workflows. A single X-Spot controller should be limited to 80 slots. This is largely independent of CPU CORES and MEMORY.
+  1. Validation via the following commands:
+     ```bash
+     cd ${SGE_ROOT}/${SGE_CELL}
+     diff ./spool/qmaster/cqueues/{all.q,xspot}
+     ```
+
+[Back to Top](#age-qsub)
+
+___
+
+## 3. qsub Wrapper Configuration
+
+As a proof of concept, a relatively simple wrapper can be placed alongside `qsub` in the `${SGE_ROOT}/bin/${ARCH}` directory. The wrapper will inspect job commands given to `qsub`, watching for requests for the `xspot` queue. If none are found, the wrapper gets out of the way and passes everything to the original `qsub` which could be renamed `qsub.orig`. If a request for the `xspot` queue is discovered by the wrapper, it will intercept any job parameters that need modification for a successful X-Spot job launch and make the required changes before passing the rest of the job parameters to the original `qsub`. The AGE Administrator is encouraged to adopt a more robust strategy, e.g. leveraging AGE's JSV framework. Exostellar can deliver the requirements for successful X-Spot job launch.
+
+  1. The following global variables should be set on the top of the wrapper script:
+     1. The wrapper script should be found here:
+        ```bash
+        ${SCRIPTS_DEPLOY_DIR}/scripts/latest/tools/sched-wrapper/qsub.py
+        ```
+	 1. Name of the docker container image running the workload.
+        ```bash
+        DOCKER_IMAGE = "<your_docker_image>"
+        ```
+     1. Full path of the `exorun` script used to schedule the jobs on an xspot controller.
+        * The default location is `/usr/bin/exorun`.
+        ```bash
+        XSPOT_RUN = "/usr/bin/exorun"
+        ```
+     1. Full path of the original qsub command on the system.
+        * The default location is `${SGE_ROOT}/bin/${ARCH}/qsub`.
+        ```bash
+        REAL_EXE = "/path/to/real/qsub"
+        ```
+     1. Default amount of memory (in GB) used by the container on an xspot worker node when not provided on the command line.
+        ```bash
+        DEFAULT_MEM = 1
+        ```
+        * Otherwise, this is specified on the `qsub` commandline with `-l`. For example:
+          ```bash
+          -l mem_free=1024M
+          ```
+     1. Default number of cpus used by the container on an xspot worker node when not provided on the command line.
+        ```bash
+        DEFAULT_CPU = 1
+        ```
+        * Otherwise, this is specified on the `qsub` commandline with `-pe`. For example:
+        ```bash
+        -pe mpi 1
+        ```
+  1. Set up the wrapper and default installation binaries for cooperation:
+     1. Rename the original `qsub` binary:
+        ```bash
+        cd ${SGE_ROOT}/bin/${ARCH}
+        mv qsub qsub.orig
+        ```
+     1. Link (or copy) the wrapper in the `${SGE_ROOT}/bin/${ARCH}` directory:
+        ```bash
+        ln -s ${SCRIPTS_DEPLOY_DIR}/scripts/latest/tools/sched-wrapper/qsub.py ./qsub
+        ```
+  1. Invocation examples:
+	 - Example #1 - 1 CPU, 1G
+       ```bash
+       qsub -q xspot -l mem_free=1024M qsub_job.sh
+       ```
+       * Actual job submitted:
+         ```bash
+         qsub.real -q xspot -pe mpi 1 -l mem_free=1G /usr/bin/exorun -i <your_docker_image> -c 1 -m 1 -- qsub_job.sh
+         ```
+	 - Example #2 - 1 CPU, rounds 2.5G to 3G
+       ```bash
+       qsub -q xspot -l mem_free=2.5G qsub_job.sh
+       ```
+       * Actual job submitted:
+         ```bash
+         qsub.real -q xspot -pe mpi 1 -l mem_free=1G /usr/bin/exorun -i <your_docker_image> -c 1 -m 3 -- qsub_job.sh
+         ```
+	 - Example #3 - 2 CPUs, rounds 2.5G to 3G
+       ```bash
+       qsub -q xspot -l mem_free=2.5G -pe mpi 2 qsub_job.sh
+       ```
+       * Actual job submitted:
+         ```bash
+         qsub.real -q xspot -pe mpi 1 -l mem_free=1G /usr/bin/exorun -i <your_docker_image> -c 2 -m 3 -- qsub_job.sh
+         ```
+
+[Back to Top](#age-qsub)
+
+# AGE JSV
+
+## Configuring jsv_xspot for AGE
+
+This document covers the configuration of the AGE job scheduler to rewrite submitted jobs to execute on a controller node running X-spot.
+### 1. Replacing the qsub command line tool
+In order to support jobs submitted from inside a container over `ssh`, we need to install `sub_wrapper.py` as a replacement for the `qsub` binary. 
+Assuming that `sub_wrapper.py` is installed in `$AGE_TOP/bin/lx-amd64` :
+
+```
+mv $AGE_TOP/bin/lx-amd64/qsub $AGE_TOP/bin/lx-amd64/qsub.orig
+ln -s $AGE_TOP/bin/lx-amd64/sub_wrapper.py $AGE_TOP/bin/lx-amd64/qsub
+```
+
+Modify the path to the original `qsub` binary in `$AGE_TOP/bin/lx-amd64/qsub`:
+Example:
+
+```
+### BEGIN CONFIGURATION #######################################################
+
+real_sub = "/fsx/ontap/exo-opt/age_0/bin/lx-amd64/qsub.orig"
+```
+
+### 2. Installing jsv_xspot
+Copy `jsv_xspot.py` to `$AGE_TOP/util/resources/jsv` and modify the queue, container image and memory configuration as needed:
+
+```
+### BEGIN CONFIGURATION #######################################################
+
+queue_cfg = { "xspot" : "/usr/bin/exorun run" }
+
+DOCKER_IMAGE = "" # image name here
+
+controller_mem = 50 # in MB
+controller_cpu = 1
+container_mem = 1024 # in MB
+container_cpu = 1
+```
+
+### 3. Configuring AGE
+To enable `jsv` and to allow it to rewrite the details of the job submitted, run `qconf -mconf` and look for `jsv_url` in the configuration.
+Add the path to `$AGE_TOP/util/resources/jsv/jsv_xspot.py`
+Example:
+
+```
+jsv_url                      /fsx/ontap/exo-opt/age_0/util/resources/jsv/jsv_xspot.py
+```
+
+Save the file and `qsub` will start validating jobs submitted using `jsv_xspot.py`. 
+Based on the configuration above, only jobs submitted to the `xspot` queue will be rewritten to use X-spot.
+
+### 4. Testing
+To verify that all the steps above were successful, a simple job can be submitted:
+
+```
+qsub -q xspot -l mem_free=2.5 simple.sh
+```
+
+Sample output:
+
+```
+controller_ip = None
+NO stdin
+NO stdin(sub_cmd)
+Your job 141 ("JOB-NAME") has been submitted
+```
+
+The output indicates if the job is going over `ssh` (`controller_ip != None`) and if the job was submitted via stdin.
+
+Job details output using `qstat -j 141`:
+
+```
+...
+hard_resource_list:         mem_free=50M
+...
+job_args:                   run,-c,1,-m,3,--,simple.sh
+script_file:                /usr/bin/exorun
+...
+```
+
+In the example above, our job was rewritten to pass the resources requested to `/usr/bin/exorun` and the job on the controller is using 50M.
+ 
+[Back to Top](#onboarding-guide)
+
+[Back to Appendix](#appendix)
+
+_______
+
+## SLURM and sbatch
+
+## Configuring CLI plug-in for Slurm
+
+This document covers the configuration of the Slurm job scheduler to rewrite submitted jobs to execute on a controller node running X-spot.
+### 1. Replacing the sbatch command line tool
+In order to support jobs submitted from inside a container over `ssh`, we need to install `sub_wrapper.py` as a replacement for the `sbatch binary`. 
+Assuming that `sub_wrapper.py` is installed in `$SLURM_TOP/sub_wrapper.py` :
+
+```
+mv $SLURM_TOP/sbatch $SLURM_TOP/sbatch.orig
+ln -s $SLURM_TOP/sub_wrapper.py $SLURM_TOP/sbatch
+```
+Modify the path to the original `sbatch` binary in `$SLURM_TOP/sub_wrapper.py`:
+Example:
+
+```
+### BEGIN CONFIGURATION #######################################################
+
+real_sub = "/fsx/ontap/exo-opt/slurm_0/sbatch.orig"
+
+real_job = "/usr/bin/exorun run"
+```
+The `real_job` parameter is the path to the job CLI wrapper that will execute on the controller.
+### 2. Installing the CLI plug-in
+Copy `cli_filter_xspot.so` to `$SLURM_TOP/cli_filter_xspot.so` so the plug-in is visible from all nodes. 
+Depending on your configuration, the Slurm libraries may be located elsewhere and you will need to create a symbolic link to the shared location in `$SLURM_TOP/cli_filter_xspot.so`.
+Example:
+
+```
+ln -s $SLURM_TOP/cli_filter_xspot.so /usr/lib64/slurm/cli_filter_xspot.so
+```
+### 3. Configuring multiple queues
+By default, the plug-in recognizes two partition names, namely `xspot` and `chipspot`. The controller node expects our container wrapper to be installed in `/usr/bin/exorun`.
+
+### 4. Configuring Slurm to use the plug-in
+To enable the plug-in, edit `/etc/slurm/slurm.conf` (location may vary) with the following:
+
+```
+CliFilterPlugins=cli_filter/xspot
+```
+### 5. Testing
+To verify that all the steps above were successful, a simple job can be submitted. Assuming `simple.sh` contains this:
+
+```
+#!/bin/bash
+#SBATCH -o %j.out
+#SBATCH -p xspot
+
+for i in {0..99}; do
+    echo $i
+done
+```
+Job submittal:
+
+```
+sbatch --ntasks=2 --mem=3G /fsx/ontap/work/user/simple.sh
+```
+Sample output:
+
+```
+controller_ip = None
+NO stdin
+('script args:', ['/fsx/ontap/work/user/simple.sh'])
+('shared_dir=', '/home/user/.xspot/head')
+pre_submit: pn_min_memory = 3072, ntasks = 2
+modified: partition = xspot, mem = 3G, cpu = 2
+Submitted batch job 15030
+```
+Under `script args`, we can see the script and its arguments.
+Under `shared_dir`, the location of a temporary directory used to rewrite the script contents to use X-spot. Files appear in that directory but are deleted immediately after `sbatch` is called.
+Under `modified`, we can see the resources requested to create the container (3G/2CPUs).
+
+The output also indicates if the job is going over `ssh` (`controller_ip != None`) and if the job was submitted via `stdin`.
 
 [Back to Top](#onboarding-guide)
+
+[Back to Appendix](#appendix)
+ 
+_______
+
+# LSF and bsub
+
+- [X-Spot Integration for IBM Load Sharing Facility](#lsf-bsub)
+  - [1. Prerequisites](#1-prerequisites)
+  - [2. LSF Configuration Modifications](#2-lsf-configuration-modifications)
+  - [3. bsub Wrapper Configuration](#3-bsub-wrapper-configuration)
+- [X-Spot Integration via ESUB for IBM Load Sharing Facility](#lsf-esub)
+
+___
+
+## 1. Prerequisites
+
+  1. A fully functional IBM Load Sharing Facility installation is required.
+  1. Sufficient privileges to modify the LSF configuration will be required.
+
+___
+
+## 2. LSF Configuration Modifications
+
+  1. If the LSF installation is not already allowing job-submission from any host, then LSF configuration changes are required when jobs are expected to submit other jobs during runtime.
+     - The following modification allows for the hosts that have access to the ${LSF_ENVDIR} and ${LSF_BINDIR} directories ( the LSF installation and configuration directories ) to submit jobs. If this is not set, any client hosts need to be statically pre-configured.
+       * Open the config for editing from:
+         ```bash
+         ${LSF_ENVDIR}/lsf.cluster.<your_cluster_name>
+         ```
+       * Add the following new section:
+         ```bash
+         Begin Parameters
+         LSF_HOST_ADDR_RANGE=*.*.*.*
+         FLOAT_CLIENTS_ADDR_RANGE=*.*.*.*
+         FLOAT_CLIENTS=10
+         End Parameters
+         ```
+       * The range above indicates all hosts, but limiting to your subnet (e.g.: 172.31.*.*) should be valid as well.
+       * `FLOAT_CLIENTS` likely needs to be augmented for as many hosts as needed:
+         - This number could be in the thousands.
+         - Licensing may be an issue here, but 100, 200, or 300 are sane defaults.
+         - If licensing erros are encountered, dropping back down to 10 is recommended for troubleshooting.
+       * Restarting fully all LSF subsystems is recommended for this global change (depicted above).
+  1.  Additionally, host name resolution can be a complicating factor as most HPC systems rely on this type of resolution as a matter of routine. DNS configuration may need to account for this. AWS default DNS in a subnet generally allows for hostname resolution by default, but if you’ve implemented your own DNS, you may need to consider adding an `${LSF_ENVDIR}/hosts` file. The hostnames in AWS are generally predictable and in the format of "ip-192-168-0-1" for a host whose IP Address is 192.168.0.1. Pre-populating the `${LSF_ENVDIR}/hosts` file with all the IP Addresses and hostnames in the subnet will facilitate job submissions from X-Spot worker nodes that may attempt to submit "sub jobs" back to the scheduler.
+NOTE: Please avoid defining the existing cluster nodes (X-Spot Controllers) with the generic "ip-192-168-0-1" hostname in this file which might conflict with the cluster configuration, or in other words, look out for duplicate IP Addresses in this file.
+  1. A host "Rosetta Stone" for clarity:
+      - | LSF terminology | typical functionality | generic terminology |
+        | :--- | :---: | ---: |
+        | Master Host | Scheduling and Job Submissions | Head Node |
+        | Server Host | Job Execution | Compute Node |
+        | Client Host | Job Submissions | Login Node |
+      - Master hosts are typically configured as client hosts.
+      - Server hosts are typically configured as client hosts.
+  1. Assumptions about LSF configuration as a key to steps below:
+     - The Master Host is represented below as `head`.
+     - A single Server Host is referenced below as `n011`, and it is a stand-in for all X-Spot controllers that will be participate in the IBM Load Sharing Facility configuration.
+  1. Add queue `xspot`.
+     > **NOTE:**
+     >
+     >   Some testing is recommended for your workflows. A single X-Spot controller should be limited to 80 for its MaxJobs setting. This is largely independent of CPU CORES and MEMORY.
+
+[Back to Top](#lsf-bsub)
+
+___
+
+## 3. bsub Wrapper Configuration
+
+As a proof of concept, a relatively simple wrapper can be placed alongside `bsub` in the `${LSF_BINDIR}` directory. The wrapper will inspect job commands given to `bsub`, watching for requests for the `xspot` queue. If none are found, the wrapper gets out of the way and passes everything to the original `bsub` which could be renamed `bsub.orig`. If a request for the `xspot` queue is discovered by the wrapper, it will intercept any job parameters that need modification for a successful X-Spot job launch and make the required changes before passing the rest of the job parameters to the original `bsub`. The LSF Administrator is encouraged to adopt a more robust strategy, e.g. leveraging LSF's `esub` framework. Exostellar can deliver the requirements for successful X-Spot job launch.
+
+  1. The following global variables should be set on the top of the wrapper script:
+     1. The wrapper script should be found here:
+        ```bash
+        ${SCRIPTS_DEPLOY_DIR}/scripts/latest/tools/sched-wrapper/bsub.py
+        ```
+	 1. Name of the docker container image running the workload.
+        ```bash
+        DOCKER_IMAGE = "<your_docker_image>"
+        ```
+     1. Full path of the `exorun` script used to schedule the jobs on an xspot controller.
+        * The default location is `/usr/bin/exorun`.
+        ```bash
+        XSPOT_RUN = "/usr/bin/exorun"
+        ```
+     1. Full path of the original bsub command on the system.
+        * The default location is `${LSF_BINDIR}/bsub`.
+        ```bash
+        REAL_EXE = "/path/to/real/bsub"
+        ```
+     1. Default amount of memory (in GB) used by the container on an xspot worker node when not provided on the command line.
+        ```bash
+        DEFAULT_MEM = 1
+         ```
+        * Otherwise, this is specified on the `bsub` commandline with `-R`. For example:
+          ```bash
+          -R rusage[mem=2.5G]
+          ```
+     1. Default number of cpus used by the container on an xspot worker node when not provided on the command line.
+        ```bash
+        DEFAULT_CPU = 1
+        ```
+        * Otherwise, this is specified on the `bsub` commandline with `-n`. For example:
+        ```bash
+        -n 5
+       ```
+  1. Set up the wrapper and default installation binaries for cooperation:
+     1. Rename the original `bsub` binary:
+        ```bash
+        cd ${LSF_BINDIR}
+        mv bsub bsub.orig
+        ```
+     1. Link (or copy) the wrapper in the `${LSF_BINDIR}` directory.
+        ```bash
+        ln -s ${SCRIPTS_DEPLOY_DIR}/scripts/latest/tools/sched-wrapper/bsub.py ./bsub
+        ```
+  1. Invocation examples:
+	 - Example #1 - 2 CPUs, Default to 1024 MB
+       ```bash
+       bsub -q xspot -n 2 lsf-job.sh
+       ```
+       * Actual job submitted:
+         ```bash
+         bsub.real -q xspot -n 1 -R rusage[mem=1024] /usr/bin/exorun -i <your_docker_image> -c 2 -m 1 -- lsf-job.sh
+         ```
+	 - Example #2 - 5 CPUs, rounds 2.5G to 3G
+       ```bash
+       bsub -q xspot -n 5 -R rusage[mem=2.5G] -R span[hosts=1] lsf-job.sh
+       ```
+       * Actual job submitted:
+         ```bash
+         bsub -q xspot -n 1 -R rusage[mem=1024] -R span[hosts=1] /usr/bin/exorun -i <your_docker_image> -c 5 -m 3 -- lsf-job.sh
+         ```
+	 - Example #3 - 5 CPUs, rounds 2049M to 3G
+       ```bash
+       bsub -q xspot -n 5 -R rusage[mem=2049] lsf-job.sh
+       ```
+       * Actual job submitted:
+         ```bash
+         bsub.real -q xspot -n 1 -R rusage[mem=1024] /usr/bin/exorun -i <your_docker_image> -c 5 -m 3 -- lsf-job.sh
+         ```
+
+[Back to Top](#lsf-bsub)
+
+
+# LSF ESUB
+
+## Configuring esub.xspot for LSF
+
+This document covers the configuration of the LSF job scheduler to rewrite submitted jobs to execute on a controller node running X-spot.
+### 1. Replacing the bsub command line tool
+In order to support jobs submitted from inside a container over `ssh`, we need to install `sub_wrapper.py` as a replacement for the `bsub` binary. 
+
+Assuming that `sub_wrapper.py` is installed in `$LSF_TOP/10.1/linux2.6-glibc2.3-x86_64/bin` :
+
+
+```
+mv $LSF_TOP/10.1/linux2.6-glibc2.3-x86_64/bin/bsub $LSF_TOP/10.1/linux2.6-glibc2.3-x86_64/bin/bsub.orig
+ln -s $LSF_TOP/10.1/linux2.6-glibc2.3-x86_64/bin/sub_wrapper.py $LSF_TOP/10.1/linux2.6-glibc2.3-x86_64/bin/bsub
+```
+Modify the path to the original `bsub` binary in `$LSF_TOP/10.1/linux2.6-glibc2.3-x86_64/bin/bsub`:
+
+Example:
+
+```
+### BEGIN CONFIGURATION #######################################################
+
+real_sub = "/fsx/ontap/exo-opt/lsf_0/10.1/linux2.6-glibc2.3-x86_64/bin/bsub.orig"
+```
+### 2. Installing esub.xspot
+Copy `esub.xspot` to `$LSF_TOP/10.1/linux2.6-glibc2.3-x86_64/etc/esub.xspot` and modify the queue, container image and memory configuration as needed:
+
+```
+### BEGIN CONFIGURATION #######################################################
+
+queue_cfg = { "xspot" : "/usr/bin/exorun run" }
+
+DOCKER_IMAGE = "" # image name here
+
+controller_mem = 50 # in MB
+controller_cpu = 1
+container_mem = 1024 # in MB
+container_cpu = 1
+```
+
+### 3. Configuring an existing esub wrapper (Optional)
+In some cases, LSF will be already configured to validate jobs with an `esub` wrapper.
+Assuming we are using `$LSF_TOP/10.1/linux2.6-glibc2.3-x86_64/etc/esub.Synopsys`, we need to chain our `esub.xspot` wrapper.
+Example:
+
+```
+#!/usr/bin/perl
+#
+
+print "Inside Synopsys esub...\n";
+
+# ...
+# Synopsys code
+# ...
+#
+
+my $ret = system("/fsx/ontap/exo-opt/lsf_0/10.1/linux2.6-glibc2.3-x86_64/etc/esub.xspot")
+
+# Exostellar modifications to LSB_SUB_MODIFY_FILE (in esub.xspot)
+
+# check 'esub.xspot' ret
+```
+### 4. Configuring LSF
+To enable `esub` and to allow it to rewrite the details of the job submitted, edit `$LSF_TOP/conf/lsf.conf` with the following:
+
+```
+LSB_ESUB_METHOD=Synopsys
+LSB_SUB_COMMANDNAME=Y
+```
+Note that the example above reflects an optional `esub.Synopsys`. To use `esub.xspot` directly, edit `$LSF_TOP/conf/lsf.conf` with the following:
+
+```
+LSB_ESUB_METHOD=xspot
+LSB_SUB_COMMANDNAME=Y
+```
+### 5. Testing
+To verify that all the steps above were successful, a simple job can be submitted:
+
+```
+bsub -q xspot -n 2 -R rusage[mem=2.5GB] -o %J.out -e %J.err sleep 60
+```
+Sample output:
+
+```
+controller_ip = None
+NO stdin
+NO stdin(sub_cmd)
+XSPOT_CONTROLLER_IP : None
+modified >>>  {'LSB_SUB_QUEUE': '"xspot"', 'LSB_SUB_MEM_USAGE': 50, 'LSB_SUB_COMMANDNAME': '"/usr/bin/exorun.py"', 'LSB_SUB_RES_REQ': '"rusage[mem=50M]"', 'LSB_SUB_OUT_FILE': '"%J.out"', 'LSB_SUB_ERR_FILE': '"%J.err"', 'LSB_SUB_MAX_NUM_PROCESSORS': 1, 'LSB_SUB_NUM_TASKS': 1, 'LSB_SUB_NUM_PROCESSORS': 1, 'LSB_SUB_MAX_NUM_TASKS': 1, 'LSB_SUB_COMMAND_LINE': '"/usr/bin/exorun.py -c 2 -m 3 -- \'"sleep 60"\'"'}
+Job <300> is submitted to queue <xspot>.
+```
+In the modified section, we can see that the job on the controller is using 50M/1CPU but the actual resources requested are used to create the container (3G/2CPUs).
+
+The output also indicates if the job is going over `ssh` (`controller_ip != None`) and if the job was submitted via stdin.
+Sample output using `ssh`:
+
+```
+controller_ip = 10.0.142.38
+*** BEGIN ssh_stdin
+...
+***  END  ssh_stdin
+NO stdin(ssh)
+Warning: Permanently added '10.0.142.38' (ECDSA) to the list of known hosts.
+modified >>>  {'LSB_SUB_QUEUE': '"xspot"', 'LSB_SUB_MEM_USAGE': 50, 'LSB_SUB_COMMANDNAME': '"/usr/bin/exorun.py"', 'LSB_SUB_RES_REQ': '"rusage[mem=50M]"', 'LSB_SUB_OUT_FILE': '"%J.out"', 'LSB_SUB_ERR_FILE': '"%J.err"', 'LSB_SUB_MAX_NUM_PROCESSORS': 1, 'LSB_SUB_NUM_TASKS': 1, 'LSB_SUB_NUM_PROCESSORS': 1, 'LSB_SUB_MAX_NUM_TASKS': 1, 'LSB_SUB_COMMAND_LINE': '"/usr/bin/exorun.py -c 4 -m 5 -- \'"/home/eric/simple.sh"\'"'}
+Job <302> is submitted to queue <xspot>.
+```
+
+[Back to Top](#onboarding-guide)
+
+[Back to Appendix](#appendix)
+
+
+_______
+
+# Cost Calculation
+## Python script: cost_calculation.py
+
+This is a python script which will generate the excel or json output with the Summary and Cost data as well as breaking down the worker/container/controller data.
+
+It is a command line tool which parses the generated log files to calculate the actual cost and estimate cost savings based on on-demand pricing.
+
+The script parses the data and collects information on the controller, workers and containers, then creates an output file. There are three types of output formats it generates, depending on what modules the environment has loaded or is willing to load.  There is an excel worksheet format, an html format and a json format.
+
+1.	Python set up:
+
+	The following python modules are necessary to run this script.
+
+	Mandatory:
+
+	- python3:
+		- yum install python3
+	- dateutil : module needed for handling timezones properly
+		- python3 –m pip install python-dateutil
+
+	Optional depending on output types:
+
+	- To generate excel worksheet output
+		- Xlsxwriter: 	pip3 install xlsxwriter
+		- pandas: 	pip3 install pandas
+	- To generate html format output
+		- Json2html: 	pip3 install json2html
+
+	python 3 or python 3.8 may be used
+
+2.	The usage is as follows:
+
+	Run a script on log files to calculate cost and estimate savings
+
+    Options:
+
+	**-l, --logs          	Location of log files to parse: must be directory   ex: logs/  (mandatory)**
+
+	-s, --start        	 Start day  (in date format: 2022-03-17), (default to 30 days ago)
+
+	-e, --end           	End day  (in date format: 2022-03-17), (default end of current day)
+
+	-n, --num_days      	Number of days: start with today or number of days since, and end with end of
+				day today (overrides any -s or -e entry) (default is this parameter is not used)
+
+	-d, --discount      	Percent discount of on-demand instances to use for analysis, (default = 0%)
+
+	-o, --output        	Enter type of output format: json, html, xlsx  (default is all 3 if modules are 							installed)
+
+	-c, --container     	Enter container ID - will display only information associated with this container 							ID, (default = '', full output generated)
+
+	-f, --containerLife 	Enter container ID - will display only information associated with this container ID in a 							'Lifetime' format, (default = '', full output generated)
+
+   	-j, --jobid	 	Enter job ID - will display only information associated with this job ID in a 									'Lifetime' format, (default = '', full output generated)
+
+
+Examples:
+
+The parameter –l (--logs) is mandatory:  the log file path
+
+python3.8 \<path\>cost_calculation.py -l \<log file path\>
+```
+python3.8 /var/log/cost_calculation.py -l /var/log/xspot/latest
+```
+
+Optional: to specify start date:
+```
+python3.8 <path>cost_calculation.py -l <log file path> -s 2023-03-17
+```
+
+Optional: to specify on xlsx output:
+```
+python3 cost_calculation.py -l <log file path> -s 2023-03-31 –o xlsx
+```
+
+
+## Cost Calculation Script Error Reference
+
+| Installation errors:  | *specific packages are not available* |
+| ----------- | ----------- |
+| Python version must be 3 or greater   |   |
+| No *\<module\>* found  | Timezone from datetime  |
+|   | Json2html |
+|   | Xlsxwrite |
+|   | Pandas |
+
+| Usage errors:  |  |
+| ----------- | ----------- |
+| *option -x not recognized* <br>   *\<Usage text should follow\>* | An incorrect option flag was entered |
+| *Entry error:  -l: location of log files parameter is mandatory* | The –l (--logs) option is missing <br> This is a mandatory option |
+| *Incorrect entry: --logs must be a directory* | The logs path must be a directory |
+| *Incorrect entry: Start time (in 2022-03-17 format)* | The incorrect date format was used <br> Ex: -s 2023-04-01 <br> Default: the last 30 days are used |
+| *Incorrect entry: End time (in 2022-03-17 format)* | The incorrect date format was used <br> Ex: -e 2023-04-01 <br> Default: end time is end of current day |
+| *Incorrect Entry: --number of days must be integer only* | The value for the day range must be an integer <br>  Ex:  -n 10 <br> Date range will be the last 10 days <br> Default : it is not used  |
+| *Incorrect entry: output file must be json, or html, or xlsx* | The output file type is entered incorrectly <br> Ex: -o xlsx <br> Default: all files are generated |
+| *Incorrect Entry: --discount must be integer only* | The value for the discount must be an integer and is the percent discount (30% => -d 30) <br> Default is 0% |
+
+| Log file parsing (time) errors:  |  |
+| ----------- | ----------- |
+| *No valid log files specified:* | Time stamp not found in first 5 and last 5 lines of file |
+|   | Corrupt log file  |
+|   | No write access to location of xspot log file(s)  |
+
+
+| General errors:  |  |
+| ----------- | ----------- |
+| *Invalid instance type:* | ‘FinalizeWorkerMetadata’ not found – resulting in no instance type found |
+| *json not matched:* | Terminating Worker Instance :  <br> misformed line in log file – no json data |
+| *Error in file: No EndTime found for Controller endtime (or lastcount)* | Error while searching for controller end time – which is the date stamp in a line at the end of the file |
+| *exception2:  list index out of range* | Controller data incorrect : endtime |
+| *no instance type for:  \<worker number\>* | The instance type to be used for cost was unable to be found from worker log data |
+| *Pricing file not found:<br>/etc/xspot/aws-pricing/.json* | The DefaultRegion was not found :  <br> which is in the Scheduler configurations line |
+| *Pricing file not found:  /etc/xspot/aws-pricing/\<region\>.json* | The pricing files are not accessible or were not created |
+| *Invalid instance type: \<instance type\>* | The pricing file was not found, or does not have the matching instance type |
+
+
+| Running for one container only data (-c option):  |  |
+| ----------- | ----------- |
+| *The Container ID entered is not unique.* | More characters in the container ID string are needed |
+| *The Container ID entered was not found.* | The entered Container ID did not match any in the log file |
+
+[Back to Top](#onboarding-guide)
+
+[Back to Appendix](#appendix)
+
+_______
+
+# s3sync-tool
+
+## Syncing a Log Directory to an S3 Bucket using AWS CLI v2 and Cron
+
+In this guide, we will walk through the process of setting up a script to periodically sync a local log directory to an S3 bucket using the AWS CLI v2 and a cron job.
+
+### Prerequisites
+- AWS CLI v2 installed on your system. You can find the installation instructions [here](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
+- A S3 bucket already created in the target AWS account.
+- The source folder on your local system that you want to sync with the S3 bucket.
+- The instance running the script should have the IAM permissions in its IAM role: `s3:ListBucket` and `s3:PutObject`.
+
+### Setting up the Script
+Open the `env.cfg` file and edit the following environment variables to match your setup:
+- `S3_BUCKET`: the name of the destination S3 bucket.
+- `SOURCE_FOLDER`: the path of the log folder on your local system that you want to sync with the S3 bucket.
+- `CRON_FREQUENCY`: the frequency in minutes at which you want to run the sync job. The default is 60 minutes.
+
+### Running the Script
+Run the script with the following command:
+```bash
+./set_cron_job.sh
+```
+The script will add a cron job to run the sync periodically based on the frequency specified in the environment variable.
+
+
+### Monitoring the Script
+The job is not added by `crontab` hence it will not show up in the output of `crontab -l` command. To check the status of the cron job, you can use the command `ls -l /etc/cron.d/` to verify that the file is present and has the correct permissions.
+
+You can also check the cron log to make sure `sync_log.sh` script is executed with the specified frequency.
+
+[Back to Top](#onboarding-guide)
+
+[Back to Appendix](#appendix)
