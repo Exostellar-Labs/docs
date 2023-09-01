@@ -1,3 +1,3 @@
 # Table of contents
 
-* [onboarding-guide](README.md)
+* [onboarding-guide](onboarding-guide.md)
