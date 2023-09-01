@@ -39,9 +39,9 @@ ___
    * [Upgrading Cluster Deployments](#upgrading-cluster-deployments)
 
 [Appendix](#appendix)
-1. [AGE and qsub](#age-qsub.md)
-1. [LSF and bsub](#lsf-bsub.md)
-1. [SLURM and sbatch](#slurm-sbatch.md)
+1. [AGE and qsub](#age-and-qsub)
+1. [SLURM and sbatch](#slurm-and-sbatch)
+1. [LSF and bsub](#lsf-and-bsub)
 1. [Cost Calculation](#cost-calculation)
 1. [S3 Sync](#s3-sync)
 
@@ -1000,9 +1000,18 @@ Rolling upgrades or swing migrations make a lot of sense in large environments w
 
 _______
 
+# [Appendix](#appendix)
+1. [AGE and qsub](#age-and-qsub)
+1. [SLURM and sbatch](#slurm-and-sbatch)
+1. [LSF and bsub](#lsf-and-bsub)
+1. [Cost Calculation](#cost-calculation)
+1. [S3 Sync](#s3-sync)
+
+_______
+
 # AGE and qsub
 
-- [X-Spot Integration for Altair Grid Engine](#age-qsub)
+- [X-Spot Integration for Altair Grid Engine](#age-and-qsub)
   - [1. Prerequisites](#1-prerequisites)
   - [2. AGE Configuration Modifications](#2-age-configuration-modifications)
   - [3. qsub Wrapper Configuration](#3-qsub-wrapper-configuration)
@@ -1039,7 +1048,7 @@ ___
      diff ./spool/qmaster/cqueues/{all.q,xspot}
      ```
 
-[Back to Top](#age-qsub)
+[Back to Top](#age-and-qsub)
 
 ___
 
@@ -1291,7 +1300,7 @@ _______
 
 # LSF and bsub
 
-- [X-Spot Integration for IBM Load Sharing Facility](#lsf-bsub)
+- [X-Spot Integration for IBM Load Sharing Facility](#lsf-and-bsub)
   - [1. Prerequisites](#1-prerequisites)
   - [2. LSF Configuration Modifications](#2-lsf-configuration-modifications)
   - [3. bsub Wrapper Configuration](#3-bsub-wrapper-configuration)
@@ -1346,7 +1355,7 @@ NOTE: Please avoid defining the existing cluster nodes (X-Spot Controllers) with
      >
      >   Some testing is recommended for your workflows. A single X-Spot controller should be limited to 80 for its MaxJobs setting. This is largely independent of CPU CORES and MEMORY.
 
-[Back to Top](#lsf-bsub)
+[Back to Top](#lsf-and-bsub)
 
 ___
 
@@ -1425,7 +1434,7 @@ As a proof of concept, a relatively simple wrapper can be placed alongside `bsub
          bsub.real -q xspot -n 1 -R rusage[mem=1024] /usr/bin/exorun -i <your_docker_image> -c 5 -m 3 -- lsf-job.sh
          ```
 
-[Back to Top](#lsf-bsub)
+[Back to Top](#lsf-and-bsub)
 
 
 # LSF ESUB
@@ -1669,7 +1678,7 @@ python3 cost_calculation.py -l <log file path> -s 2023-03-31 –o xlsx
 
 _______
 
-# s3sync-tool
+# S3 Sync
 
 ## Syncing a Log Directory to an S3 Bucket using AWS CLI v2 and Cron
 
