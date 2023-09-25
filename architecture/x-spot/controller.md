@@ -1,3 +1,0 @@
-# Controller
-
-* Scheduling Algorithms

@@ -26,4 +26,4 @@ Call us: [**+1 607-218-5948**](tel:607-218-5948)
 
 Mail us:
 
-<table data-card-size="large" data-view="cards"><thead><tr><th></th></tr></thead><tbody><tr><td><p>350 Duffield Hall,</p><p>Suite N,</p><p>Ithaca,</p><p>NY 14850,</p><p>USA</p></td></tr><tr><td><p>2811 Mission College Blvd.,</p><p> 7th Floor, </p><p>Santa Clara, </p><p>CA 95054, </p><p>USA</p></td></tr></tbody></table>
+<table data-card-size="large" data-view="cards"><thead><tr><th></th></tr></thead><tbody><tr><td><p>350 Duffield Hall,</p><p>Suite N,</p><p>Ithaca,</p><p>NY 14850,</p><p>USA</p></td></tr><tr><td>3979 Freedom Cir, <br>Floor 3, <br>Santa Clara, <br>CA, <br>USA</td></tr></tbody></table>

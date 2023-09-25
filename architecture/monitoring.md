@@ -1,4 +1,0 @@
-# Monitoring
-
-* ELK Stack
-* Metering

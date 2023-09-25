@@ -1,5 +1,0 @@
-# Worker
-
-* Platforms
-  * Hypervisor
-  * Kernel
