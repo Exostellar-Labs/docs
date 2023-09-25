@@ -17,8 +17,8 @@ In most production environments, X-Spot will be integrated with the scheduler fo
        bsub -q xspot -n 2 ./job.sh
        ```
 2. Refer to the documents on scheduler integration for more details.
-   * [qsub](https://github.com/Exostellar-Labs/docs/blob/main/.age-qsub.md)
-   * [sbatch](https://github.com/Exostellar-Labs/docs/blob/main/.slurm-sbatch.md)
+   * qsub
+   * sbatch
 3. To add `exorun` to your current shell's path, you can run a few commands to simplify.
 4.  Validate the `exorun` executable's location and permissions:
 

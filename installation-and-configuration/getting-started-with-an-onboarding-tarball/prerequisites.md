@@ -26,7 +26,7 @@ layout:
 3. Create or choose a VPC and a subnet that you want to put your X-Spot controller and workers in.
    * X-Spot creates an internal overlay network with CIDR 192.168.137.0/24 by default.
    * We need to ensure the overlay network does not conflict the CIDR in your VPC.
-   * If there is any overlapping, we will [modify X-Spot configurations](https://github.com/Exostellar-Labs/docs#3-configuration) as described later.
+   * If there is any overlapping, we will modify[ X-Spot configurations](pre-configuration.md) as described later.
 4. Add a NAT gateway to your subnet.
 5. Allow access to the following websites and URLs:
    * AWS EC2 API Endpoint:
@@ -49,6 +49,74 @@ layout:
     * X-Spot makes requests to Amazon Web Services.
     * To support that, you need to create and attach an IAM role to the instance running the X-Spot controller.
     * The included policy [iam-policy.json](https://github.com/Exostellar-Labs/docs/blob/main/iam-policy.json) needs to be attached to the role
+    * ```
+      // X-SpotControllerRole-rc.1.3.0
+      {
+          "Version": "2012-10-17",
+          "Statement": [
+              {
+                  "Effect": "Allow",
+                  "Action": [
+                      "ec2:RunInstances",
+                      "ec2:DescribeSpotPriceHistory",
+                      "ec2:DescribeInstances",
+                      "ec2:DescribeInstanceTypes",
+                      "ec2:DescribeTags",
+                      "ec2:CreateTags",
+                      "ec2:CreateFleet",
+                      "ec2:CreateLaunchTemplate",
+                      "ec2:DeleteLaunchTemplate",
+                      "ec2:TerminateInstances",
+                      "ec2:AssignPrivateIpAddresses",
+                      "ec2:UnassignPrivateIpAddresses",
+                      "ec2:AttachNetworkInterface",
+                      "ec2:DetachNetworkInterface",
+                      "ec2:CreateNetworkInterface",
+                      "ec2:DeleteNetworkInterface",
+                      "ec2:ModifyNetworkInterfaceAttribute",
+                      "ec2:DescribeRegions"
+                  ],
+                  "Resource": "*"
+              },
+              {
+                  "Effect": "Allow",
+                  "Action": [
+                      "iam:CreateServiceLinkedRole",
+                      "iam:ListRoles",
+                      "iam:ListInstanceProfiles",
+                      "iam:PassRole"
+                  ],
+                  "Resource": "*"
+              },
+              {
+                  "Effect": "Allow",
+                  "Action": [
+                      "ec2:DescribeSubnets",
+                      "ec2:DescribeSecurityGroups",
+                      "ec2:DescribeImages",
+                      "ec2:DescribeKeyPairs",
+                      "ec2:DescribeInstanceTypeOfferings",
+                      "iam:GetInstanceProfile",
+                      "iam:GetRole",
+                      "iam:SimulatePrincipalPolicy",
+                      "sns:Publish",
+                      "ssm:GetParameters"
+                  ],
+                  "Resource": "*"
+              },
+              {
+                  "Action": "sts:DecodeAuthorizationMessage",
+                  "Effect": "Allow",
+                  "Resource": "*"
+              },
+              {
+                  "Action": "ssm:GetParametersByPath",
+                  "Effect": "Allow",
+                  "Resource": "*"
+              }
+          ]
+      }
+      ```
 
     > **IMPORTANT:**
     >

@@ -64,4 +64,4 @@
 
 > **IMPORTANT:**
 >
-> The IAM role from the [prerequisites step](https://github.com/Exostellar-Labs/docs#prerequisites) will need to be attached to **every X-Spot controller**.
+> The IAM role from the [prerequisites step](prerequisites.md) will need to be attached to **every X-Spot controller**.

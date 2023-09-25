@@ -1,6 +1,6 @@
 # Fresh Upgrades
 
-Starting from scratch basically means following the onboarding procedure which you are already familiar with. For this reason, it may appear like the path of least resistance. It is the recommended path for upgrades because it is a well-known path. Provision a new VM to be an X-Spot controller and start from the [X-Spot Worker AMI Preparation step](https://github.com/Exostellar-Labs/docs#x-spot-worker-ami-preparation).
+Starting from scratch basically means following the onboarding procedure which you are already familiar with. For this reason, it may appear like the path of least resistance. It is the recommended path for upgrades because it is a well-known path. Provision a new VM to be an X-Spot controller and start from the [X-Spot Worker AMI Preparation step](../../installation-and-configuration/getting-started-with-an-onboarding-tarball/x-spot-worker-ami-preparation.md).
 
 ### Upgrading Configuration <a href="#user-content-upgrading-configuration" id="user-content-upgrading-configuration"></a>
 
@@ -51,14 +51,14 @@ It is possible to leverage assets from a previous X-Spot installation to avoid r
         make rebuild-image
         ```
 5. Upgrade X-Spot worker
-   * Create a new scratch VM as in the [X-Spot Worker Preparation step aboeve](https://github.com/Exostellar-Labs/docs#x-spot-worker-preparation).
+   * Create a new scratch VM as in the [X-Spot Worker Preparation step above](../../installation-and-configuration/getting-started-with-an-onboarding-tarball/x-spot-worker-ami-preparation.md).
    * Update the ami ID in `./scripts/controller/integrate-xspot/config.toml`
 6.  Upgrade X-Spot controller
 
     ```
     make upgrade
     ```
-7. From the [Script Deployment step above](https://github.com/Exostellar-Labs/docs#script-deployment), do:
+7. From the [Script Deployment step above](../../installation-and-configuration/getting-started-with-an-onboarding-tarball/script-deployment.md), do:
    * ```
      make sync-config-preview
      ```
@@ -91,7 +91,7 @@ It is possible to leverage assets from a previous X-Spot installation to avoid r
     ... post-docker.sh: Finished.
     ... systemd: Started Post Docker Configuration.
     ```
-9. From [Cluster Deployment step above](https://github.com/Exostellar-Labs/docs#cluster-deployment) you may prefer to create an AMI from the updated X-Spot controller.
+9. From [Cluster Deployment step above](../../installation-and-configuration/getting-started-with-an-onboarding-tarball/cluster-deployment.md) you may prefer to create an AMI from the updated X-Spot controller.
 
 ### Upgrading Cluster Deployments <a href="#user-content-upgrading-cluster-deployments" id="user-content-upgrading-cluster-deployments"></a>
 
@@ -109,7 +109,7 @@ Rolling upgrades or swing migrations make a lot of sense in large environments w
 
 * Because the cloud offers a theoretically unlimited number of instances or VMs, you can set up a new X-Spot controller without taking any out of production. The new X-Spot controller would only be released to production when it's fully validated. At that stage, a previous X-Spot controller could be removed from production.
   * In fact, all the replacement X-Spot controllers can be brought online and —once fully validated— pushed into production before any previous X-Spot controllers are removed.
-  * See [Cluster Deployment step above](https://github.com/Exostellar-Labs/docs#cluster-deployment).
+  * See [Cluster Deployment step above](../../installation-and-configuration/getting-started-with-an-onboarding-tarball/cluster-deployment.md).
 *   If it's not possible to provision a new X-Spot controller, then one of the production X-Spot controllers will need to be idled. Once all jobs have cleared off it, upgrading can begin.
 
     ```
@@ -138,4 +138,4 @@ Rolling upgrades or swing migrations make a lot of sense in large environments w
 
     * In a similar fashion, each subsequent X-Spot controller marked for upgrade can be removed from production, one at a time or in mulitples at a time, while still preserving a limited production capacity of X-Spot controllers while the others are upgraded.
 * Regardless of your approach, (serial replacements or parallel replacements), it would be considered best practice to move through the upgrade process on a single X-Spot controller and fully validate it before moving on to address upgrades in the rest of the fleet of X-Spot controllers.
-* As noted above, and depending on the scale of the upgrade, [creating an AMI](https://github.com/Exostellar-Labs/docs#cluster-deployment) may be an efficient way forward.
+* As noted above, and depending on the scale of the upgrade, creating an AMI may be an efficient way forward.

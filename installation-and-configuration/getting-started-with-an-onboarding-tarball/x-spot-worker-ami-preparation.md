@@ -6,7 +6,7 @@
 >
 > This step can be done in parallel with the following section, if you'd like to save time.
 >
-> For example, during [Containerization step](https://github.com/Exostellar-Labs/docs#containerization) after issuing the `make base` command might be a good time come back to this step while that command runs.
+> For example, during [Containerization step](containerization.md) after issuing the `make base` command might be a good time come back to this step while that command runs.
 
 1.  Create the worker AMI.
 
@@ -61,5 +61,5 @@
           > **NOTE:**
           >
           > It is recommended to tag this X-Spot Release Version as found in the `onboarding/conf/env.cfg` file so that compatability can be easily tracked and compared in the future.
-      * Upon completion, make note of the AMI ID, which will be required in the [X-Spot Integration step](https://github.com/Exostellar-Labs/docs#x-spot-integration).
+      * Upon completion, make note of the AMI ID, which will be required in the [X-Spot Integration step](x-spot-integration.md).
       * **Note:** It can take a few minutes for the AMI ID to display as `available` in the AWS Console.
