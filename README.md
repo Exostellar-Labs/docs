@@ -28,7 +28,7 @@ We started with a group of computer scientists and researchers from Cornell Univ
 
 ## Product Offerings and Key Features
 
-<figure><img src=".gitbook/assets/Screenshot 2023-10-02 at 3.12.01 PM.png" alt="" width="375"><figcaption><p>Exostellar Architecture Overview</p></figcaption></figure>
+<figure><img src=".gitbook/assets/Screenshot 2023-10-02 at 3.12.01 PM.png" alt="" width="563"><figcaption><p>Exostellar Architecture Overview</p></figcaption></figure>
 
 ### Autonomous Compute Engine (ACE)
 
@@ -43,6 +43,4 @@ ACE is a cloud-agnostic platform built to simplify operations and reduce costs o
 ### AI Scheduling System (ASSIST)
 
 AI Scheduling System (ASSIST) is the AI-powered partner to ACE, continually monitoring and acting to optimize workloads across a compute fleet​. Our ASSIST UI provides a single pane of glass overview of your compute along with powerful reporting and usage metrics
-
-
 
