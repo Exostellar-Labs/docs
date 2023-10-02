@@ -58,5 +58,5 @@
 
 ## Other Resources
 
+* [Support](other-resources/support.md)
 * [Contact Us](other-resources/contact-us.md)
-* [Release Notes](other-resources/release-notes.md)

@@ -1,5 +1,8 @@
 ---
 description: Demonstrating what X-Spot can do for a high-performance application
+cover: >-
+  https://images.unsplash.com/photo-1621508727844-09cc245de555?crop=entropy&cs=srgb&fm=jpg&ixid=M3wxOTcwMjR8MHwxfHNlYXJjaHwxfHxzdGVsbGFyfGVufDB8fHx8MTY5NjI3ODUwN3ww&ixlib=rb-4.0.3&q=85
+coverY: 0
 ---
 
 # Astronomical increase in compute for same cloud spend in DOE demonstration
