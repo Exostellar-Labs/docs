@@ -33,8 +33,6 @@
       * [X-Spot Integration via JSV for Altair Grid Engine](installation-and-configuration/getting-started-with-an-onboarding-tarball/x-spot-integratons/x-spot-integration-for-altair-grid-engine/x-spot-integration-via-jsv-for-altair-grid-engine.md)
     * [X-Spot Integration for SLURM](installation-and-configuration/getting-started-with-an-onboarding-tarball/x-spot-integratons/x-spot-integration-for-slurm.md)
     * [Syncing to S3](installation-and-configuration/getting-started-with-an-onboarding-tarball/x-spot-integratons/syncing-to-s3.md)
-* [License](installation-and-configuration/license.md)
-* [Health Check](installation-and-configuration/health-check.md)
 
 ## USAGE
 

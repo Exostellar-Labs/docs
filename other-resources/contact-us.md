@@ -7,11 +7,9 @@ coverY: 0
 
 ## **Email us**
 
-If you are interested in knowing more about our products, please query [**info@exostellar.io**](mailto:info@exostellar.io).
+If you are interested in knowing more about our products, please query [**pm@exostellar.io**](mailto:pm@exostellar.io).
 
-## **Slack us**
 
-You are also welcome to join our **Slack Community** to talk directly to one of our team members!
 
 ## **Follow us**
 
