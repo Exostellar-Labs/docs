@@ -28,8 +28,6 @@ We started with a group of computer scientists and researchers from Cornell Univ
 
 ## Product Offerings and Key Features
 
-<figure><img src=".gitbook/assets/Screenshot 2023-10-02 at 3.12.01 PM.png" alt="" width="563"><figcaption><p>Exostellar Architecture Overview</p></figcaption></figure>
-
 ### Autonomous Compute Engine (ACE)
 
 **Exostellar’s Autonomous Compute Engine (ACE)** drives the automated management of your workloads across public cloud infrastructure (on-demand, reserved, savings plan, and spot market instances).&#x20;
@@ -37,10 +35,8 @@ We started with a group of computer scientists and researchers from Cornell Univ
 ACE is a cloud-agnostic platform built to simplify operations and reduce costs of complex workloads in the clouds, that intelligently sizes and migrates workloads to the best-suited infrastructure platforms for optimal performance with ZERO Downtime.&#x20;
 
 * **Infrastructure Optimizer** automatically configures the optimal infrastructure mix, leveraging the various public cloud instance categories
-* **Workload Optimizer** dynamically scales CPU, memory, and I/O resources without stopping your application
+* **Workload Optimizer** dynamically right-sizing CPU, memory, and I/O resources without stopping your application
 * **GPU Optimizer** improves GPU utilization and throughput to reduce costs for GPU-intensive workloads
 
-### AI Scheduling System (ASSIST)
 
-AI Scheduling System (ASSIST) is the AI-powered partner to ACE, continually monitoring and acting to optimize workloads across a compute fleet​. Our ASSIST UI provides a single pane of glass overview of your compute along with powerful reporting and usage metrics
 

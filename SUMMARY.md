@@ -44,7 +44,7 @@
 
 ## Architecture
 
-* [Diagrams](architecture/diagrams.md)
+* [Architecture Diagram](architecture/architecture-diagram.md)
 
 ## Upgrades
 
