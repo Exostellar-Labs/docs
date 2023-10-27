@@ -26,6 +26,16 @@ Under the tab **AWS Marketplace AMIs**, select Exostellar's X-Spot Controller, s
 
 <figure><img src="../../.gitbook/assets/image (4).png" alt=""><figcaption><p>Exostellar’s X-Spot Controller Via AWS Marketplace</p></figcaption></figure>
 
+{% hint style="warning" %}
+To configure the AMI for IMDSv2:
+
+```
+aws ec2 modify-image-attribute \
+    --image-id ami-0123456789example \
+    --imds-support v2.0
+```
+{% endhint %}
+
 ### Step 2: Launch the Instance Using the Created Resources <a href="#step-2-launch-the-instance-using-the-created-resources" id="step-2-launch-the-instance-using-the-created-resources"></a>
 
 {% hint style="info" %}
