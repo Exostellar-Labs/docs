@@ -20,11 +20,9 @@ Go to **EC2 > Instances > Launch an instance**
 
 For **Application and OS Images (Amazon Machine Image)**, search for "compute-optimizer controller".
 
-<figure><img src="../../.gitbook/assets/image (3).png" alt=""><figcaption><p>Launch Compute Optimizer Controller on an EC2 Instance</p></figcaption></figure>
-
 Under the tab **AWS Marketplace AMIs**, select Exostellar's Compute Optimizer Controller, subscribe, and continue.
 
-<figure><img src="../../.gitbook/assets/image (4).png" alt=""><figcaption><p>Exostellar’s Compute Optimizer Controller Via AWS Marketplace</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/Screenshot 2023-11-10 at 11.23.21 AM.png" alt=""><figcaption><p>Exostellar’s Compute Optimizer Controller Via AWS Marketplace</p></figcaption></figure>
 
 {% hint style="warning" %}
 To configure the AMI for IMDSv2:

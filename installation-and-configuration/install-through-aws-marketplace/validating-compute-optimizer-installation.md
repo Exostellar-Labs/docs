@@ -28,5 +28,4 @@ xspot add -c 4 -m 8192
 Sample success output for `xspot ps`:
 {% endhint %}
 
-<figure><img src="../../.gitbook/assets/image (12).png" alt=""><figcaption><p><code>xspot ps</code> output</p></figcaption></figure>
-
+<figure><img src="../../.gitbook/assets/Screenshot 2023-11-10 at 10.02.16 AM.png" alt=""><figcaption></figcaption></figure>
