@@ -16,28 +16,20 @@ If the scheduler is disabled, no automatic migration will be performed.
 
 **Default**: false
 
-&#x20;
-
 `evacuation_threshold` - The minimum amount of time to keep a workload on a spot instance before evacuating instances of that type. There will be a test run as we approach this time limit if no spot instances of that type have\
 started naturally.
 
 **Default**: 35 minutes
 
-&#x20;
-
 `booting_timeout` - How long the controller should wait for a worker to complete booting before trying a new instance
 
 **Default**: 5 minutes
-
-&#x20;
 
 `try_spot_period` - How long the conroller should try for a spot instance when creating a new worker for new containers.\
 If the spot request doesn't get fulfilled within this period, try an on-demand instance instead.\
 Setting this value to -1 means we disable spot instances for new containers.
 
 **Default**: 15 seconds
-
-&#x20;
 
 `spot_delay_period` - (optional) Time period that starts after a spot worker connects to the controller and after which it is considered stable enough to use.\
 It is intended to prevent problems with very fast spot cancellations which tend to happen within the first minute of a worker joining.\
@@ -47,19 +39,13 @@ For no spot delay set this to -1 rather than to 0.
 
 Note: setting it to zero is effectively the same as setting it to the default value
 
-&#x20;
-
 `idle_time` - (optional) How long a worker can remain idle (no workload running on it) before being terminated. This does not apply to newly started workers which can idle for 30s max after entering a ready state.
 
 **Default**: 2 minutes
 
-&#x20;
-
 `port` - The listening port for the Compute Optimizer scheduler grpc service
 
 **Default**: 24002
-
-&#x20;
 
 `log_file` - Where Compute Optimizer's scheduler should write controller log messages. If set to stdout the logs will be picked up by the xspot log service.
 
@@ -67,22 +53,16 @@ Example: /var/log/xspot.log
 
 **Default**: stdout
 
-&#x20;
-
 `log_level` - The level of logging
 
 **Options**: debug, info, warn, error
 
 **Default**: info
 
-&#x20;
-
 `advisor_service` - (optional) The advisor is a service that can provide additional insights for the scheduler\
 Set to an advisor endpoint to enable, set to "off" to disable
 
 **Default**: [https://spot-advisor.exostellar.io](https://spot-advisor.exostellar.io/)
-
-&#x20;
 
 `advisor_level` - (optional) Indicates the level of information to send with the advisor messages\
 The current levels are default which sends all information the advisor might need, and minimal which sends the absolute minimum amount of information. Sending all information increases the likelihood that the scheduler will be able to leverage future improvements to the advisor service
@@ -91,32 +71,22 @@ The current levels are default which sends all information the advisor might nee
 
 **Default**: "default"
 
-&#x20;
-
 `advisor_frequency` - (optional) The number of seconds between requests for advice on which spot instance types to pause from the advisor.\
 The minimum value this can be set to is 30. Any lower value will be ignored.
 
 **Default**: 300
 
-&#x20;
-
 `http_proxy` - (optional) Proxy to use for the connection with the advisor
 
 **Default**: none
-
-&#x20;
 
 `discount_aws` - Discount used for cost calculations - this is the percent discount AWS provides
 
 **Default**: 0%
 
-&#x20;
-
 `dashboard_frequency` - the number of minutes between log updates to the dashboard log file
 
 **Default**: 1
-
-&#x20;
 
 `hyperthreading_disabled` - (optional) Whether to disable the use of hyperthreading
 
@@ -134,19 +104,13 @@ example: "/", "/xspot", "/path/to/xspot/parameters/"
 
 **Default**:
 
-&#x20;
-
-`ssm_root` - (optional)  "/xspot"
+`ssm_root` - (optional) "/xspot"
 
 **Default**:
-
-&#x20;
 
 `ssm_region` - (optional) = "us-east-1"
 
 **Default**: Controller's region
-
-&#x20;
 
 `ami` - The ami for creating worker instances\
 This can be one of:
@@ -157,25 +121,17 @@ This can be one of:
 
 **Default**: N/A
 
-&#x20;
-
 `security_groups` - (optional) Default security groups for creating worker instances. Comment this out or set to an empty list to use the security groups of the controller
 
 **Default**: defaults to the controller security groups
-
-&#x20;
 
 `key_name` - (optional) ssh key for creating worker instances. Comment this out or set an empty string "" to use the key of the controller
 
 **Default**: defaults to the controller key
 
-&#x20;
-
 `subnet_id` - (optional) Default subnet to which you want to add worker instances. Comment this out or set an empty string "" to use the subnet of the controller
 
 **Default**: defaults to the controller subnet
-
-&#x20;
 
 The following options specify tags that you want to add to the worker instances and volumes.\
 inherit\_instance\_tags and inherit\_volume\_tags allow you to propagate tags from the controller node.\
@@ -220,13 +176,9 @@ Any type not given a priority defaults to priority 0.
 
 Example: \["r5:3", "r5d:2", "r5n:1"]
 
-&#x20;
-
 `spot_fleet_types` - A list of all instance types and/or instance type families to use for spot workers. Spot types can have priority (see on\_demand\_types)\
 Example: \["m5:1", "m5d:0", "m5n:0", "m6i:2"]\
 **Default**: \["m5.2xlarge", "m5n.2xlarge"]
-
-&#x20;
 
 (optional) The allocation strategies for on-demand and spot instance types. These strategies are used by AWS and determine\
 from which capacity pools new instances are launched.\
@@ -238,17 +190,11 @@ Note - Only options containing "prioritized" will honor the priorities specified
 **Options**: lowest-price, prioritized\
 **Default**: prioritized
 
-&#x20;
-
 `dom0_memory` - Reserved memory size in MB for Domain-0 in worker nodes\
 **Default**: 2048 MB
 
-&#x20;
-
 `default_container_cpu` - The default number of cpu for containers\
 **Default**: 1
-
-&#x20;
 
 `default_container_mem` - The default memory size for containers in MB\
 **Default**: 2048\
@@ -258,13 +204,11 @@ the maximum default\_container\_mem you can set is 32GB - 2GB = 30GB (30720 MB)
 
 ### `[network]` <a href="#network" id="network"></a>
 
-#### Section used to configure the internal overlay network used by Compute Optimizer for a controller and its workers and containers <a href="#section-used-to-configure-the-internal-overlay-network-used-by-compute-optimizer-for-a-controller-and-its-worke" id="section-used-to-configure-the-internal-overlay-network-used-by-compute-optimizer-for-a-controller-and-its-worke"></a>
+#### Section used to configure the internal overlay network used by Compute Optimizer for a controller and its workers and containers <a href="#section-used-to-configure-the-internal-overlay-network-used-by-compute-optimizer-for-a-controller-an" id="section-used-to-configure-the-internal-overlay-network-used-by-compute-optimizer-for-a-controller-an"></a>
 
 `overlay_prefix` - The prefix for the internal overlay network used by Compute Optimizer (24 bits)\
 Example: a "10.0.0." prefix means a CIDR block: 10.0.0.0/24\
 **Default**: 192.168.137.
-
-&#x20;
 
 `mtu` - The maximum transmission unit for the overlay network\
 **Default**: 8900\
@@ -277,27 +221,19 @@ Note - The docker mtu is configured separately in /etc/docker/daemon.json
 `worker_grpc_port` - The default worker grpc port, listened on by worker nodes, and dialed by the controller\
 **Default**: 1235
 
-&#x20;
-
 `shared_mount_source` - mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport \<aws\_efs\_endpoint> /run/xspot/share/\
 Source for a mount that is shared between controller and workers.\
 **Default**: none\
 Note - If set to localhost, we use the controller node as the nfs server, and exportfs /run/xspot/share. If set to none, the shared mount is disabled
 
-&#x20;
-
 `shared_mount_type` - Type of shared mount\
 **Default**: nfs
-
-&#x20;
 
 `shared_mount_options` - Options for the shared mount
 
 Example "nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport"\
 **Default**: none\
 Note - If `shared_mount_source` is localhost, this option is not used
-
-&#x20;
 
 `enable_balloon` - EXPERIMENTAL - Turns on self-ballooning which minimizes container memory throughout its lifetime\
 **Default**: false
@@ -311,20 +247,14 @@ If log\_file is not set to stdout, the full path would include the instanceid,\
 e.g., /run/xspot/share/${controller\_instanceid}/${log\_file}\
 **Default**: stdout
 
-&#x20;
-
 `log_level` - The level of logging
 
 **Options**: info, debug\
 **Default**: debug
 
-&#x20;
-
 `shared_mount_point` - Directory for the shared mount\
 **Default**: /run/xspot/share\
 Note - if `shared_mount_source` is locahost, not used
-
-&#x20;
 
 `crash_timeout` - Time a worker or container can be unresponsive before it is considered crashed and cleaned up.\
 **Default**: 2 min
@@ -338,29 +268,19 @@ If log\_file is not set to stdout, the full path would include the instanceid,\
 e.g., /run/xspot/share/${controller\_instanceid}/${instance\_id}/${log\_file}\
 **Default**: stdout
 
-&#x20;
-
 `log_level` - The level of logging
 
 **Options**: info, debug\
 **Default**: debug
 
-&#x20;
-
 `shared_mount_point` - Directory for the shared mount\
 **Default**: /run/xspot/share
-
-&#x20;
 
 `enable_debug` - Whether to enable debug messages in log files. Disabling will delete log files after terminating the container\
 **Default**: false
 
-&#x20;
-
 `enable_vifroute` - Enable vif-native-route for host network connectivity\
 **Default**: false
-
-&#x20;
 
 `virt_mode` - Virtualization mode for the worker
 
@@ -373,28 +293,24 @@ pvh virtualization only works on bare metal instances. auto will detect the inst
 `cpu_pin` - Enable vCPU pinning to physical cores. This feature takes into consideration hyperthreading information and NUMA node information.\
 **Default**: false
 
-&#x20;
-
 `cpuid` - CPUID instruction configuration value in libxl format for the container\
 Setting this to "host,htt=0" will present vCPUs as single-threaded cores to the container.\
 Setting this to "host,htt=1" will present vCPUs as hyperthreaded cores to the container.\
 Note: "htt=1" is valid only when the underlying physical CPUs are hyperthreaded.\
-Setting this to "host,pse=0" will disable super pages for the container.  This is useful if the kernel doesn't properly support super pages.\
+Setting this to "host,pse=0" will disable super pages for the container. This is useful if the kernel doesn't properly support super pages.\
 **Default**: "host,htt=0"
 
 (for advanced use only) cpuid mask in xend format, comment out or specify empty list to disable\
 see below for example specification\
 cpuid = \[\
-&#x20;   "0x00000001:ecx=xxxxxxxxxx0xxxxxxxxxxxxxxxxxxxxx,edx=xxxx0xxxxxxxxxxxxxxx0xxxxxxxxxxx",\
-&#x20;   "0x80000001:ecx=xxxxxxxxxxxxxxxxxxxxxxx000xxxx0x,edx=xxxxxx0xx0xxxxxxxxxxxxxxxxxxxxxx",\
-&#x20;   "0x0000000d,1:eax=xxxxxxxxxxxxxxxxxxxxxxxxxxxxx00x",\
-&#x20;   "0x00000007,0:ebx=0000xxx00xxx0000xxxx0x0xxxx0xxxx,ecx=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx,edx=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",\
-&#x20;   "0x80000007:edx=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",\
-&#x20;   "0x80000008:ebx=xxxxxxxxxxxxxxxxxxxxxxxxxxxxx0x0",\
-&#x20;   "0x00000007,1:eax=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",\
+"0x00000001:ecx=xxxxxxxxxx0xxxxxxxxxxxxxxxxxxxxx,edx=xxxx0xxxxxxxxxxxxxxx0xxxxxxxxxxx",\
+"0x80000001:ecx=xxxxxxxxxxxxxxxxxxxxxxx000xxxx0x,edx=xxxxxx0xx0xxxxxxxxxxxxxxxxxxxxxx",\
+"0x0000000d,1:eax=xxxxxxxxxxxxxxxxxxxxxxxxxxxxx00x",\
+"0x00000007,0:ebx=0000xxx00xxx0000xxxx0x0xxxx0xxxx,ecx=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx,edx=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",\
+"0x80000007:edx=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",\
+"0x80000008:ebx=xxxxxxxxxxxxxxxxxxxxxxxxxxxxx0x0",\
+"0x00000007,1:eax=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",\
 ]
-
-&#x20;
 
 `scratch_type`- Type of scratch storage to use. The size of the scratch storage in GB is set per container with the environment variable XSPOT\_SCRATCH when creating a container.\
 If the environment variable is not set no scratch storage is added. The scratch storage is exposed to the container as a device.\
@@ -402,8 +318,6 @@ Note: to enable file based scratch storage the config parameters beginning with 
 
 **Options**: file, ebs\
 **Default**: none
-
-&#x20;
 
 `scratch_caching` - Enables the use of local ssd storage, if available, to cache the scratch storage\
 **Default**: false
@@ -415,7 +329,7 @@ Note: to enable file based scratch storage the config parameters beginning with 
 `key` - Specify the floating key for the license system.\
 For a mechanism other than floating license, use one of the following values:
 
-* marketplace: "compute-optimizer-marketplace"
-* metering:    "compute-optimizer-metering"
+* marketplace: "x-spot-marketplace"
+* metering: "x-spot-metering"
 
 **Default**: If neither the designated 'marketplace' or 'metering' string are matched, Compute Optimizer will assume a floating key should be passed
