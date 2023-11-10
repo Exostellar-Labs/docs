@@ -14,7 +14,7 @@ layout:
 
 # Subscribing to Compute Optimizer Worker
 
-#### Step 1: Log into AWS Marketplace <a href="#step-1-log-into-aws-marketplace" id="step-1-log-into-aws-marketplace"></a>
+### Step 1: Log into AWS Marketplace <a href="#step-1-log-into-aws-marketplace" id="step-1-log-into-aws-marketplace"></a>
 
 In the **search bar**, search for “compute optimizer worker“.
 
