@@ -48,9 +48,227 @@ layout:
 
     * Compute Optimizer makes requests to Amazon Web Services.
     * To support that, you need to create and attach an IAM role to the instance running the Compute Optimizer controller.
-    * The included policy [iam-policy.json](https://github.com/Exostellar-Labs/docs/blob/main/iam-policy.json) needs to be attached to the role
+    * The included policy iam-policy.json needs to be modified and attached to the role. Statement blocks with an Sid starting with "Optional" can be removed if not required.
+    * The following variables need to be replaced in the policy document before attaching it to a role:
+      * \<REGION>
+      * \<WORKER\_SUBNET\_ID>
+      * \<CONTROLLER\_IAM\_ROLE\_INSTANCE\_PROFILE\_ARN>
+      * \<WORKER\_IAM\_ROLE\_INSTANCE\_PROFILE\_ARN> - this resource definition can be removed if no IAM role is used for the worker
+      * \<CONTROLLER\_IAM\_ROLE\_ARN>
+      * (optional) \<WORKER\_IAM\_ROLE\_ARN>
+      * (optional) \<WATCHDOG\_TOPIC\_ARN>
+      * (optional) \<SSM\_PARAMETER\_STORE\_ARN+ROOT\_PATH>
     * ```
-      // Compute OptimizerControllerRole-rc.1.3.0
+      // ComputeOptimizerControllerRole-rc.1.3.0.6
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Sid": "xspotFleetCreation",
+                "Effect": "Allow",
+                "Action": "ec2:CreateFleet",
+                "Resource": "arn:aws:ec2:<REGION>:*:launch-template/*"
+            },
+            {
+                "Sid": "xspotFleetCreationTagging",
+                "Effect": "Allow",
+                "Action": "ec2:CreateFleet",
+                "Resource": [
+                    "arn:aws:ec2:<REGION>:*:instance/*",
+                    "arn:aws:ec2:<REGION>:*:fleet/*"
+                ],
+                "Condition": {
+                    "StringLike": {
+                        "aws:RequestTag/exo-fleet": "*"
+                    }
+                }
+            },
+            {
+                "Sid": "xspotInstanceCreation",
+                "Effect": "Allow",
+                "Action": "ec2:RunInstances",
+                "Resource": [
+                    "arn:aws:ec2:<REGION>:*:subnet/<WORKER_SUBNET_ID>",
+                    "arn:aws:ec2:<REGION>:*:image/ami-*",
+                    "arn:aws:ec2:<REGION>:*:key-pair/*",
+                    "arn:aws:ec2:<REGION>:*:security-group/*",
+                    "arn:aws:ec2:<REGION>:*:launch-template/*"
+                ]
+            },
+            {
+                "Sid": "xspotInstanceCreationTagging",
+                "Effect": "Allow",
+                "Action": "ec2:RunInstances",
+                "Resource": [
+                    "arn:aws:ec2:<REGION>:*:instance/*",
+                    "arn:aws:ec2:<REGION>:*:volume/*",
+                    "arn:aws:ec2:<REGION>:*:network-interface/*"
+                ],
+                "Condition": {
+                    "StringLike": {
+                        "aws:RequestTag/exo-fleet": "*"
+                    }
+                }
+            },
+            {
+                "Sid": "xspotResourceCreation",
+                "Effect": "Allow",
+                "Action": [
+                    "ec2:CreateLaunchTemplate",
+                    "ec2:CreateVolume"
+                ],
+                "Resource": [
+                    "arn:aws:ec2:<REGION>:*:launch-template/*",
+                    "arn:aws:ec2:<REGION>:*:volume/*"
+                ],
+                "Condition": {
+                    "StringLike": {
+                        "aws:RequestTag/exo-fleet": "*"
+                    }
+                }
+            },
+            {
+                "Sid": "xspotSnapshotCreation",
+                "Effect": "Allow",
+                "Action": "ec2:CreateSnapshot",
+                "Resource": "arn:aws:ec2:<REGION>:*:volume/*"
+            },
+            {
+                "Sid": "xspotSnapshotCreationTagging",
+                "Effect": "Allow",
+                "Action": "ec2:CreateSnapshot",
+                "Resource": "arn:aws:ec2:<REGION>::snapshot/*",
+                "Condition": {
+                    "StringLike": {
+                        "aws:RequestTag/exo-fleet": "*"
+                    }
+                }
+            },
+            {
+                "Sid": "xspotTagsForResourceCreation",
+                "Action": "ec2:CreateTags",
+                "Effect": "Allow",
+                "Resource": "arn:aws:ec2:<REGION>:*:*/*",
+                "Condition": {
+                    "StringEquals": {
+                        "ec2:CreateAction": [
+                            "CreateLaunchTemplate",
+                            "RunInstances",
+                            "CreateVolume",
+                            "CreateFleet",
+                            "CreateSnapshot"
+                        ]
+                    }
+                }
+            },
+            {
+                "Sid": "xspotResourceDescription",
+                "Effect": "Allow",
+                "Action": [
+                    "ec2:DescribeSpotPriceHistory",
+                    "ec2:DescribeInstances",
+                    "ec2:DescribeInstanceTypes",
+                    "ec2:DescribeTags",
+                    "ec2:DescribeSubnets",
+                    "ec2:DescribeSecurityGroups",
+                    "ec2:DescribeImages",
+                    "ec2:DescribeKeyPairs",
+                    "ec2:DescribeInstanceTypeOfferings",
+                    "ec2:DescribeVolumes",
+                    "ec2:DescribeSnapshots",
+                    "iam:ListInstanceProfiles"
+                ],
+                "Resource": "*"
+            },
+            {
+                "Sid": "xspotResourceModification",
+                "Effect": "Allow",
+                "Action": [
+                    "ec2:AssignPrivateIpAddresses",
+                    "ec2:UnassignPrivateIpAddresses",
+                    "ec2:ModifyInstanceAttribute",
+                    "ec2:AttachVolume",
+                    "ec2:DetachVolume",
+                    "ec2:StopInstances",
+                    "ec2:RebootInstances"
+                ],
+                "Resource": [
+                    "arn:aws:ec2:<REGION>:*:network-interface/*",
+                    "arn:aws:ec2:<REGION>:*:volume/*",
+                    "arn:aws:ec2:<REGION>:*:instance/*"
+                ],
+                "Condition": {
+                    "StringLike": {
+                        "aws:ResourceTag/exo-fleet": "*"
+                    }
+                }
+            },
+            {
+                "Sid": "xspotResourceDeletion",
+                "Effect": "Allow",
+                "Action": [
+                    "ec2:DeleteLaunchTemplate",
+                    "ec2:TerminateInstances",
+                    "ec2:DeleteVolume"
+                ],
+                "Resource": [
+                    "arn:aws:ec2:<REGION>:*:instance/*",
+                    "arn:aws:ec2:<REGION>:*:volume/*",
+                    "arn:aws:ec2:<REGION>:*:launch-template/*"
+                ],
+                "Condition": {
+                    "StringLike": {
+                        "aws:ResourceTag/exo-fleet": "*"
+                    }
+                }
+            },
+            {
+                "Sid": "xspotInstanceProfile",
+                "Effect": "Allow",
+                "Action": "iam:GetInstanceProfile",
+                "Resource": [
+                    "<CONTROLLER_IAM_ROLE_INSTANCE_PROFILE_ARN>",
+                    "<WORKER_IAM_ROLE_INSTANCE_PROFILE_ARN>"
+                ]
+            },
+            {
+                "Sid": "xspotPolicySimulation",
+                "Effect": "Allow",
+                "Action": "iam:SimulatePrincipalPolicy",
+                "Resource": "<CONTROLLER_IAM_ROLE_ARN>"
+            },
+            {
+                "Sid": "OptionalXspotWorkerIamRole",
+                "Effect": "Allow",
+                "Action": "iam:PassRole",
+                "Resource": "<WORKER_IAM_ROLE_ARN>"
+            },
+            {
+                "Sid": "OptionalXspotWatchDogSNS",
+                "Effect": "Allow",
+                "Action": "sns:Publish",
+                "Resource": "<WATCHDOG_TOPIC_ARN>"
+            },
+            {
+                "Sid": "OptionalXspotParameterStore",
+                "Effect": "Allow",
+                "Action": [
+                    "ssm:GetParametersByPath",
+                    "ssm:GetParameters"
+                ],
+                "Resource": "<SSM_PARAMETER_STORE_ARN+ROOT_PATH>/*"
+            },
+            {
+                "Sid": "OptionalDebuggingHelp",
+                "Action": "sts:DecodeAuthorizationMessage",
+                "Effect": "Allow",
+                "Resource": "*"
+            }
+        ]
+      }
+      ```
+    * ```
+      // ComputeOptimizerControllerRole-rc.1.3.0
       {
           "Version": "2012-10-17",
           "Statement": [
@@ -122,7 +340,8 @@ layout:
     >
     > This role will need to be attached to **every Compute Optimizer controller**.
 
-    7.1. Changelog: 2023-08-11 : added ec2:DescribeInstanceTypes into the IAM policy.
+    7.1. Changelog: 2023-08-11 : added ec2:DescribeInstanceTypes into the IAM policy.\
+
 8. Make note of linux and AWS services that are likely to be required, as well as any pertinent version information. Some filesystem or directory services may require additional configuration and validation to ensure compatability. The services listed below fall into two general categories: authentication or directory services (ldap, sssd) and remote-filesystems (Lustre, NetApp ONTAP, autofs). If a required service is not listed below but is required, please let support know about your needs and use-case.
    * Amazon FSx for Lustre
    * Amazon FSx for NetApp ONTAP
@@ -139,8 +358,6 @@ layout:
     * The real limit of how many containers we can start on a single controller will be the smaller number of the two mentioned above. For the controller, CPU usage is typically not a concern, since the disk space for docker images is the bottleneck. But we recommend 4 CPUs (2 cores) and 8GB memory and a local SSD for the controller. On AWS this would be a c5d.xlarge or m5d.xlarge VM, and can go with other instance types depending on the storage requirements.
 11. VMs or EC2 instances required for this guide:
     *   HPC Cluster Environment
-
-
 
         <table><thead><tr><th width="161">VM Reference Name</th><th width="120">Required?</th><th width="162" align="center">Recommended Instance Type</th><th align="right">Comment</th></tr></thead><tbody><tr><td>Compute Optimizer controller</td><td>Yes</td><td align="center">m5d.xlarge or an instance with "d" before the period</td><td align="right">Most steps take place on this node. Ideally it is a fully functional and validated compute node in the cluster.</td></tr><tr><td>Compute Optimizer worker AMI builder</td><td>Yes</td><td align="center">m5.xlarge or c5.xlarge</td><td align="right">This VM will only exist for 15 - 30 minutes and can be terminated thereafter.</td></tr></tbody></table>
 
