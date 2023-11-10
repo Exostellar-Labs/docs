@@ -1,6 +1,6 @@
-# X-Spot Validation
+# Compute Optimizer Validation
 
-### X-Spot Validation as Root <a href="#user-content-x-spot-validation-as-root" id="user-content-x-spot-validation-as-root"></a>
+### Compute Optimizer Validation as Root <a href="#user-content-compute optimizer-validation-as-root" id="user-content-compute optimizer-validation-as-root"></a>
 
 > **Note:**
 >
@@ -8,11 +8,11 @@
 
 | Who? | On which system?  | In which directory?             |
 | ---- | ----------------- | ------------------------------- |
-| root | X-Spot controller | /nfs-apps/exostellar/onboarding |
+| root | Compute Optimizer controller | /nfs-apps/exostellar/onboarding |
 
 > **Reminder:** `/nfs-apps` is a stand-in for the path to your remote folder
 
-Validate X-Spot installation and docker images.
+Validate Compute Optimizer installation and docker images.
 
 1. It's often preferred to leverage a terminal multiplexer such as GNU's `screen` or `tmux` or simply to open multiple shells on the node. Some windows can be used to monitor progress while others can be used to run commands associated with validation steps.
 2.  Run the following command:
@@ -22,12 +22,12 @@ Validate X-Spot installation and docker images.
     ```
 
     * This command should run with no errors.
-3.  To faciliate testing on the X-Spot controller, toggle the X-Spot scheduler off via:
+3.  To faciliate testing on the Compute Optimizer controller, toggle the Compute Optimizer scheduler off via:
 
     ```
     xspot scheduler off
     ```
-4.  Further faciliate testing by requesting an ondemand instance from the X-Spot controller via:
+4.  Further faciliate testing by requesting an ondemand instance from the Compute Optimizer controller via:
 
     ```
     xspot add -c 4 -m 8
@@ -75,7 +75,7 @@ Validate X-Spot installation and docker images.
     > ```
     >
     > For the example output above, as root on xspot-controller, you can `ssh 172.31.27.26` and you can inspect your expected mount points with `df` or the `mount` utilities on the worker.
-7.  In the original shell or a new one, run the following command to start a container with X-Spot and connect to its console:
+7.  In the original shell or a new one, run the following command to start a container with Compute Optimizer and connect to its console:
 
     * If `conf/env.cfg` was configured for an image name other than the default, `docker-base`, then the below command may need modification based on your image name.
 
@@ -90,7 +90,7 @@ Validate X-Spot installation and docker images.
 10. Modifications to the container or sandbox environment are expected, which will require editing the `startup.sh` script located at `/etc/xspot/scripts/`.
     * Also possibly the `Dockerfile` and/or `/etc/xspot/config/dockerWrapper.toml` may need changes.
 
-### X-Spot Validation as User <a href="#user-content-x-spot-validation-as-user" id="user-content-x-spot-validation-as-user"></a>
+### Compute Optimizer Validation as User <a href="#user-content-compute optimizer-validation-as-user" id="user-content-compute optimizer-validation-as-user"></a>
 
 > **Note:**
 >
@@ -98,14 +98,14 @@ Validate X-Spot installation and docker images.
 
 | Who?        | On which system?  | In which directory?                            |
 | ----------- | ----------------- | ---------------------------------------------- |
-| an end-user | X-Spot controller | any valid job-submit directory for the cluster |
+| an end-user | Compute Optimizer controller | any valid job-submit directory for the cluster |
 
 > **Reminder:** `/nfs-apps` is a stand-in for the path to your remote folder
 
 Test with a valid or real workload.
 
 1. Once the system administrator's tunings as root are validated, proceed to testing with a real user account.
-2.  Run the following command to start a container with X-Spot and connect to its console:
+2.  Run the following command to start a container with Compute Optimizer and connect to its console:
 
     ```
     exorun run -c 4 -m 8 -i docker-base -- /bin/bash
@@ -135,7 +135,7 @@ Test with a valid or real workload.
          > **Reminder:**
          >
          > `stty sane` or `reset` is needed when finished.
-4.  When testing concludes, reenable the X-Spot scheduler via:
+4.  When testing concludes, reenable the Compute Optimizer scheduler via:
 
     ```
     xspot scheduler on
@@ -147,7 +147,7 @@ Test with a valid or real workload.
         xspot rm <worker-id-hash>
         ```
 
-### X-Spot Validation When Satisfied <a href="#user-content-x-spot-validation-when-satisfied" id="user-content-x-spot-validation-when-satisfied"></a>
+### Compute Optimizer Validation When Satisfied <a href="#user-content-compute optimizer-validation-when-satisfied" id="user-content-compute optimizer-validation-when-satisfied"></a>
 
 > **Note:**
 >
@@ -155,7 +155,7 @@ Test with a valid or real workload.
 
 | Who? | On which system?  | In which directory?             |
 | ---- | ----------------- | ------------------------------- |
-| root | X-Spot controller | /nfs-apps/exostellar/onboarding |
+| root | Compute Optimizer controller | /nfs-apps/exostellar/onboarding |
 
 > **Reminder:** `/nfs-apps` is a stand-in for the path to your remote folder
 

@@ -8,17 +8,17 @@
 | ---- | --------------------------- | ------------------------ |
 | root | Cluster Head or Master node | Depends on HPC Scheduler |
 
-1. Create a new "xspot" queue in the cluster's scheduler configuration. This new queue or partition is meant to be comprised soley of X-Spot controllers.
-2. There are a few ways of bringing up X-Spot controllers automatically:
-   * You may prefer to create an AMI from a fully validated X-Spot controller, and use that for new controller VMs.
+1. Create a new "xspot" queue in the cluster's scheduler configuration. This new queue or partition is meant to be comprised soley of Compute Optimizer controllers.
+2. There are a few ways of bringing up Compute Optimizer controllers automatically:
+   * You may prefer to create an AMI from a fully validated Compute Optimizer controller, and use that for new controller VMs.
      * Create a new AMI from the VM.
        * To create a new AMI, go to the AWS Console.
-       * Navigate to EC2 Services and select the Instance ID of an X-Spot controller.
+       * Navigate to EC2 Services and select the Instance ID of an Compute Optimizer controller.
        * In the upper right corner, select 'Actions' > 'images and templates' from the drop down.
        * Click on 'Create image'
        * A meaningful name will be required.
-       * Upon completion, make note of the AMI ID, which can expedite deployments of future X-Spot controllers for the site.
-   *   You can run these commands by hand on an X-Spot controller that will persist beyond reboots.
+       * Upon completion, make note of the AMI ID, which can expedite deployments of future Compute Optimizer controllers for the site.
+   *   You can run these commands by hand on an Compute Optimizer controller that will persist beyond reboots.
 
        > **Note:**
        >
@@ -26,7 +26,7 @@
 
        | Who? | On which system?  | In which directory?                                                        |
        | ---- | ----------------- | -------------------------------------------------------------------------- |
-       | root | X-Spot controller | ${REMOTE\_DIR}/scripts/latest/ also known as ${SCRIPT\_DEPLOY\_DIR}/latest |
+       | root | Compute Optimizer controller | ${REMOTE\_DIR}/scripts/latest/ also known as ${SCRIPT\_DEPLOY\_DIR}/latest |
 
        > **Reminder:** `REMOTE_DIR` and `SCRIPT_DEPLOY_DIR` are set in the `onboarding/conf/env.cfg` file.
 
@@ -51,7 +51,7 @@
            ... post-docker.sh: Finished.
            ... systemd: Started Post Docker Configuration.
            ```
-   * Similar to the previous option, you can add this logic to X-Spot controller bootstrapping in auto-scaling environments.
+   * Similar to the previous option, you can add this logic to Compute Optimizer controller bootstrapping in auto-scaling environments.
      *   Run the following script when the VM boots:
 
          ```
@@ -64,4 +64,4 @@
 
 > **IMPORTANT:**
 >
-> The IAM role from the [prerequisites step](prerequisites.md) will need to be attached to **every X-Spot controller**.
+> The IAM role from the [prerequisites step](prerequisites.md) will need to be attached to **every Compute Optimizer controller**.

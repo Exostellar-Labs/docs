@@ -1,2 +1,2 @@
-# X-Spot Integratons
+# Compute Optimizer Integratons
 

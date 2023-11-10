@@ -1,17 +1,17 @@
 # Config.toml User Guide
 
-This document provides insight into the configuration file, `config.toml`, used by X-Spot
+This document provides insight into the configuration file, `config.toml`, used by Compute Optimizer
 
-Each key/value pair represents a field used by X-Spot for some configurable option.
+Each key/value pair represents a field used by Compute Optimizer for some configurable option.
 
 Each key has a description of its use, along with a default if not required to be set. Key with a default of "N/A" are required to be set\
 Options where a key is marked 'optional' are not used unless set
 
 ### `[scheduler]` <a href="#scheduler" id="scheduler"></a>
 
-This section contains parameters used by the X-Spot scheduling algorithm
+This section contains parameters used by the Compute Optimizer scheduling algorithm
 
-`scheduler_enabled` - Whether the automatic scheduling feature is on or not. The scheduling algorithm determines whether X-Spot run workloads should be automatically migrated to a different workload based on X-Spot's scheduling policy.\
+`scheduler_enabled` - Whether the automatic scheduling feature is on or not. The scheduling algorithm determines whether Compute Optimizer run workloads should be automatically migrated to a different workload based on Compute Optimizer's scheduling policy.\
 If the scheduler is disabled, no automatic migration will be performed.
 
 **Default**: false
@@ -55,13 +55,13 @@ Note: setting it to zero is effectively the same as setting it to the default va
 
 &#x20;
 
-`port` - The listening port for the X-Spot scheduler grpc service
+`port` - The listening port for the Compute Optimizer scheduler grpc service
 
 **Default**: 24002
 
 &#x20;
 
-`log_file` - Where X-Spot's scheduler should write controller log messages. If set to stdout the logs will be picked up by the xspot log service.
+`log_file` - Where Compute Optimizer's scheduler should write controller log messages. If set to stdout the logs will be picked up by the xspot log service.
 
 Example: /var/log/xspot.log
 
@@ -128,7 +128,7 @@ The minimum value this can be set to is 30. Any lower value will be ignored.
 
 `ssm_root` - (optional) The root path and region for loading xspot configurations from AWS SSM parameter store\
 Note that the parameter store parameters will override the local configuration if this value is set to a non-empty string.\
-Parameters inside the store need to follow the same hiarachy as the configuration file, for example: ${ssm\_root}/scheduler/scheduler\_enabled, ${ssm\_root}/aws/ami, please refer to X-Spot Installation Guide for more information.
+Parameters inside the store need to follow the same hiarachy as the configuration file, for example: ${ssm\_root}/scheduler/scheduler\_enabled, ${ssm\_root}/aws/ami, please refer to Compute Optimizer Installation Guide for more information.
 
 example: "/", "/xspot", "/path/to/xspot/parameters/"
 
@@ -203,7 +203,7 @@ You can also add or override the tags by manually specifying instance\_tags and 
 
 ### `[worker]` <a href="#worker" id="worker"></a>
 
-#### Fields that are used to configure X-Spot workers <a href="#fields-that-are-used-to-configure-x-spot-workers" id="fields-that-are-used-to-configure-x-spot-workers"></a>
+#### Fields that are used to configure Compute Optimizer workers <a href="#fields-that-are-used-to-configure-compute optimizer-workers" id="fields-that-are-used-to-configure-compute optimizer-workers"></a>
 
 `on_demand_types` - A list of all instance types and/or instance type families to use for on demand workers\
 For any instance size (cpu and mem) in on\_demand\_types there should be a worker of\
@@ -258,9 +258,9 @@ the maximum default\_container\_mem you can set is 32GB - 2GB = 30GB (30720 MB)
 
 ### `[network]` <a href="#network" id="network"></a>
 
-#### Section used to configure the internal overlay network used by X-Spot for a controller and its workers and containers <a href="#section-used-to-configure-the-internal-overlay-network-used-by-x-spot-for-a-controller-and-its-worke" id="section-used-to-configure-the-internal-overlay-network-used-by-x-spot-for-a-controller-and-its-worke"></a>
+#### Section used to configure the internal overlay network used by Compute Optimizer for a controller and its workers and containers <a href="#section-used-to-configure-the-internal-overlay-network-used-by-compute optimizer-for-a-controller-and-its-worke" id="section-used-to-configure-the-internal-overlay-network-used-by-compute optimizer-for-a-controller-and-its-worke"></a>
 
-`overlay_prefix` - The prefix for the internal overlay network used by X-Spot (24 bits)\
+`overlay_prefix` - The prefix for the internal overlay network used by Compute Optimizer (24 bits)\
 Example: a "10.0.0." prefix means a CIDR block: 10.0.0.0/24\
 **Default**: 192.168.137.
 
@@ -272,7 +272,7 @@ Note - The docker mtu is configured separately in /etc/docker/daemon.json
 
 ### `[exo]` <a href="#exo" id="exo"></a>
 
-### Section to configure X-Spot runtime options shared by controller and worker runtime <a href="#section-to-configure-x-spot-runtime-options-shared-by-controller-and-worker-runtime" id="section-to-configure-x-spot-runtime-options-shared-by-controller-and-worker-runtime"></a>
+### Section to configure Compute Optimizer runtime options shared by controller and worker runtime <a href="#section-to-configure-compute optimizer-runtime-options-shared-by-controller-and-worker-runtime" id="section-to-configure-compute optimizer-runtime-options-shared-by-controller-and-worker-runtime"></a>
 
 `worker_grpc_port` - The default worker grpc port, listened on by worker nodes, and dialed by the controller\
 **Default**: 1235
@@ -306,7 +306,7 @@ Note - If `shared_mount_source` is localhost, this option is not used
 
 #### Runtime options unique to the controller <a href="#runtime-options-unique-to-the-controller" id="runtime-options-unique-to-the-controller"></a>
 
-`log_file` - Where X-Spot should write controller log messages\
+`log_file` - Where Compute Optimizer should write controller log messages\
 If log\_file is not set to stdout, the full path would include the instanceid,\
 e.g., /run/xspot/share/${controller\_instanceid}/${log\_file}\
 **Default**: stdout
@@ -333,7 +333,7 @@ Note - if `shared_mount_source` is locahost, not used
 
 #### Runtime options unique to the worker <a href="#runtime-options-unique-to-the-worker" id="runtime-options-unique-to-the-worker"></a>
 
-`log_file` - Where X-Spot should write worker log messages\
+`log_file` - Where Compute Optimizer should write worker log messages\
 If log\_file is not set to stdout, the full path would include the instanceid,\
 e.g., /run/xspot/share/${controller\_instanceid}/${instance\_id}/${log\_file}\
 **Default**: stdout
@@ -415,7 +415,7 @@ Note: to enable file based scratch storage the config parameters beginning with 
 `key` - Specify the floating key for the license system.\
 For a mechanism other than floating license, use one of the following values:
 
-* marketplace: "x-spot-marketplace"
-* metering:    "x-spot-metering"
+* marketplace: "compute optimizer-marketplace"
+* metering:    "compute optimizer-metering"
 
-**Default**: If neither the designated 'marketplace' or 'metering' string are matched, X-Spot will assume a floating key should be passed
+**Default**: If neither the designated 'marketplace' or 'metering' string are matched, Compute Optimizer will assume a floating key should be passed

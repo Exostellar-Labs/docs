@@ -1,6 +1,6 @@
-# Running workloads with X-Spot
+# Running workloads with Compute Optimizer
 
-In most production environments, X-Spot will be integrated with the scheduler for frictionless adoption, but it would still be possilbe leverage `exorun` manually since it is will be on on every users' PATH on X-Spot controllers by default.
+In most production environments, Compute Optimizer will be integrated with the scheduler for frictionless adoption, but it would still be possilbe leverage `exorun` manually since it is will be on on every users' PATH on Compute Optimizer controllers by default.
 
 > **Note:**
 >
@@ -10,8 +10,8 @@ In most production environments, X-Spot will be integrated with the scheduler fo
 | ----------- | ----------------------------------- | ---------------------------- |
 | an end-user | any valid submit host or login node | a valid job-submit directory |
 
-1. X-Spot integration for job submission via native `bsub`, `qsub`, and `sbatch` commands:
-   *   Once the `bsub`, `qsub`, `sbatch` integration is setup, X-Spot jobs (routed to the xspot queue) will automatically interoperate with the scheduler. E.g:
+1. Compute Optimizer integration for job submission via native `bsub`, `qsub`, and `sbatch` commands:
+   *   Once the `bsub`, `qsub`, `sbatch` integration is setup, Compute Optimizer jobs (routed to the xspot queue) will automatically interoperate with the scheduler. E.g:
 
        ```
        bsub -q xspot -n 2 ./job.sh
@@ -40,7 +40,7 @@ In most production environments, X-Spot will be integrated with the scheduler fo
     ```
     which exorun
     ```
-8.  Jobs can be started in X-Spot containers by using the job wrapper:
+8.  Jobs can be started in Compute Optimizer containers by using the job wrapper:
 
     ```
     exorun run -c <cpu_num> -m <mem_size> -- command param1 param2 ...

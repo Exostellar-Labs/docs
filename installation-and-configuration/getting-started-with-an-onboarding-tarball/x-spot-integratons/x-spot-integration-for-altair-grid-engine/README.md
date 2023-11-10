@@ -1,4 +1,4 @@
-# X-Spot Integration for Altair Grid Engine
+# Compute Optimizer Integration for Altair Grid Engine
 
 ### Prerequisites <a href="#user-content-1-prerequisites" id="user-content-1-prerequisites"></a>
 
@@ -9,7 +9,7 @@
 
 1. Assumptions about AGE configuration as a key to steps below:
    * The Master Host is represented below as `head`.
-   * A single Execution Host is referenced below as `n011`, and it is a stand-in for all X-Spot controllers that will be participate in the Altair Grid Engine configuration.
+   * A single Execution Host is referenced below as `n011`, and it is a stand-in for all Compute Optimizer controllers that will be participate in the Altair Grid Engine configuration.
 2. Add queue `xspot`.
    * difference between deafult all.q and xspot:
      * qname
@@ -22,7 +22,7 @@
 
          > **NOTE:**
          >
-         > Some testing is recommended for your workflows. A single X-Spot controller should be limited to 80 slots. This is largely independent of CPU CORES and MEMORY.
+         > Some testing is recommended for your workflows. A single Compute Optimizer controller should be limited to 80 slots. This is largely independent of CPU CORES and MEMORY.
 3.  Validation via the following commands:
 
     ```
@@ -32,7 +32,7 @@
 
 ### qsub Wrapper Configuration <a href="#user-content-3-qsub-wrapper-configuration" id="user-content-3-qsub-wrapper-configuration"></a>
 
-As a proof of concept, a relatively simple wrapper can be placed alongside `qsub` in the `${SGE_ROOT}/bin/${ARCH}` directory. The wrapper will inspect job commands given to `qsub`, watching for requests for the `xspot` queue. If none are found, the wrapper gets out of the way and passes everything to the original `qsub` which could be renamed `qsub.orig`. If a request for the `xspot` queue is discovered by the wrapper, it will intercept any job parameters that need modification for a successful X-Spot job launch and make the required changes before passing the rest of the job parameters to the original `qsub`. The AGE Administrator is encouraged to adopt a more robust strategy, e.g. leveraging AGE's JSV framework. Exostellar can deliver the requirements for successful X-Spot job launch.
+As a proof of concept, a relatively simple wrapper can be placed alongside `qsub` in the `${SGE_ROOT}/bin/${ARCH}` directory. The wrapper will inspect job commands given to `qsub`, watching for requests for the `xspot` queue. If none are found, the wrapper gets out of the way and passes everything to the original `qsub` which could be renamed `qsub.orig`. If a request for the `xspot` queue is discovered by the wrapper, it will intercept any job parameters that need modification for a successful Compute Optimizer job launch and make the required changes before passing the rest of the job parameters to the original `qsub`. The AGE Administrator is encouraged to adopt a more robust strategy, e.g. leveraging AGE's JSV framework. Exostellar can deliver the requirements for successful Compute Optimizer job launch.
 
 1. The following global variables should be set on the top of the wrapper script:
    1.  The wrapper script should be found here:

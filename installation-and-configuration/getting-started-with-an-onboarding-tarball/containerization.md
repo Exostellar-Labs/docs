@@ -32,7 +32,7 @@ layout:
 
 | Who? | On which system?  | In which directory?             |
 | ---- | ----------------- | ------------------------------- |
-| root | X-Spot controller | /nfs-apps/exostellar/onboarding |
+| root | Compute Optimizer controller | /nfs-apps/exostellar/onboarding |
 
 > **Reminder:** `/nfs-apps` is a stand-in for the path to your remote folder
 

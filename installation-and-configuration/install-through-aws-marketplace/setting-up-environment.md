@@ -14,16 +14,16 @@ layout:
 
 # Setting Up Environment
 
-We understand that cloud control and security are essential to you. In order to install X-Spot and start saving right away, we need your help to set up the right environment for X-Spot. Once X-Spot is installed, it will manage and optimize your computing instances for you.
+We understand that cloud control and security are essential to you. In order to install Compute Optimizer and start saving right away, we need your help to set up the right environment for Compute Optimizer. Once Compute Optimizer is installed, it will manage and optimize your computing instances for you.
 
-To install X-Spot and start cost savings, we need to set up the correct cloud infrastructures.
+To install Compute Optimizer and start cost savings, we need to set up the correct cloud infrastructures.
 
 ### Step 1: Create a VPC and a Subnet
 
-This is where your X-Spot Controller and Worker reside.
+This is where your Compute Optimizer Controller and Worker reside.
 
 After logging into your AWS Console:\
-Go to **Virtual Private Cloud (VPC)** > **Your VPCs** > **Create VPC**, please specify a CIDR other than 192.168.137.0/24, since X-Spot creates an overlay.\
+Go to **Virtual Private Cloud (VPC)** > **Your VPCs** > **Create VPC**, please specify a CIDR other than 192.168.137.0/24, since Compute Optimizer creates an overlay.\
 Go to  **VPC** > **Subnets** > **Create subnet**, within the VPC you just created.\
 Go to  **VPC** > **Internet gateways** > **Create internet gateway**.\
 Go to  **VPC** > **Network Address Translation (NAT) gateways** > **Create NAT gateway**.
@@ -33,7 +33,7 @@ Please allow access to the following addresses and ports:
 | Endpoint                          | Address                                              | Port |
 | --------------------------------- | ---------------------------------------------------- | ---- |
 | AWS EC2 API                       | [http://ec2.amazonaws.com](http://ec2.amazonaws.com) | 443  |
-| X-Spot Advisor Service (optional) | 3.135.60.35                                          | 443  |
+| Compute Optimizer Advisor Service (optional) | 3.135.60.35                                          | 443  |
 
 ### Step 2: Create a Security Group
 
@@ -46,7 +46,7 @@ Add the following **Inbound rules**:
 | SSH         | TCP      | 22         | 0.0.0.0/0     |
 
 {% hint style="info" %}
-X-Spot Controller and Workers can be in different security groups as long as the internal traffic are allowed between them.
+Compute Optimizer Controller and Workers can be in different security groups as long as the internal traffic are allowed between them.
 {% endhint %}
 
 ### Step 3: Create an IAM role with least-privilege permissions <a href="#step-3-create-an-iam-role-with-least-privilege-permissions" id="step-3-create-an-iam-role-with-least-privilege-permissions"></a>
@@ -54,7 +54,7 @@ X-Spot Controller and Workers can be in different security groups as long as the
 &#x20;Go to **Identity and Access Management (IAM)** > **Policies** > **Create policy**.
 
 ```
-// X-SpotControllerRole-rc.1.3.0
+// Compute OptimizerControllerRole-rc.1.3.0
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -125,7 +125,7 @@ X-Spot Controller and Workers can be in different security groups as long as the
 &#x20;Go to **Identity and Access Management (IAM)** > **Roles** > **Create role** and add the permissions policies for EC2.
 
 {% hint style="info" %}
-Please attach this role to EVERY X-Spot Controller.
+Please attach this role to EVERY Compute Optimizer Controller.
 {% endhint %}
 
 

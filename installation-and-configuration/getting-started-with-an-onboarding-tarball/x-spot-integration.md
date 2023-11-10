@@ -1,6 +1,6 @@
-# X-Spot Integration
+# Compute Optimizer Integration
 
-### X-Spot Configuration <a href="#user-content-x-spot-configuration" id="user-content-x-spot-configuration"></a>
+### Compute Optimizer Configuration <a href="#user-content-compute optimizer-configuration" id="user-content-compute optimizer-configuration"></a>
 
 > **Note:**
 >
@@ -8,7 +8,7 @@
 
 | Who? | On which system?  | In which directory?             |
 | ---- | ----------------- | ------------------------------- |
-| root | X-Spot controller | /nfs-apps/exostellar/onboarding |
+| root | Compute Optimizer controller | /nfs-apps/exostellar/onboarding |
 
 > **Reminder:** `/nfs-apps` is a stand-in for the path to your remote folder
 
@@ -25,8 +25,8 @@
    * Main configs to tune:
      * | Expression                  | Explanation                                                                                                                           |
        | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-       | `ami =`                     | The worker AMI ID from [X-Spot Worker AMI Preparation step](https://github.com/Exostellar-Labs/docs#x-spot-worker-ami-preparation). . |
-       | `overlay_prefix =`          | This class C network definition cannot overlap with X-Spot controller's subnet.                                                       |
+       | `ami =`                     | The worker AMI ID from [Compute Optimizer Worker AMI Preparation step](https://github.com/Exostellar-Labs/docs#compute optimizer-worker-ami-preparation). . |
+       | `overlay_prefix =`          | This class C network definition cannot overlap with Compute Optimizer controller's subnet.                                                       |
        | `on_demand_types =`         | List of instance type and families for on-demand instances.                                                                           |
        | `spot_fleet_types =`        | List of instance type and families for spot instances.                                                                                |
        | `hyperthreading_disabled =` | Setting to true disables hyperthreading on worker instances.                                                                          |
@@ -37,16 +37,16 @@
        [license]
 
        #Specify the floating key for the license system. For a mechanism other than floating license, use one of the following values:
-       key = "x-spot-metering"
+       key = "compute optimizer-metering"
        ```
-3. (optional) Log files by default reside in `/var/log/xspot` on each X-Spot controller.
+3. (optional) Log files by default reside in `/var/log/xspot` on each Compute Optimizer controller.
    *   To modify the default behavior, edit the log file configuration:
 
        ```
        ./scripts/controller/integrate-xspot/config/log_upload.env
        ```
    * Look for and reset the `LOG_PATH=` directive in the config file.
-   * We recommend a remote filesystem to centralize the X-Spot controller logs if changing the default location.
+   * We recommend a remote filesystem to centralize the Compute Optimizer controller logs if changing the default location.
 
 ### exorun Configuration <a href="#user-content-exorun-configuration" id="user-content-exorun-configuration"></a>
 
@@ -56,9 +56,9 @@
 
 | Who? | On which system?  | In which directory?             |
 | ---- | ----------------- | ------------------------------- |
-| root | X-Spot controller | /nfs-apps/exostellar/onboarding |
+| root | Compute Optimizer controller | /nfs-apps/exostellar/onboarding |
 
-> **Reminder:** `/nfs-apps` is a stand-in for the path to your remote folder There are several scripts and a config file used to configure the X-Spot CLI Wrapper known as `exorun`:
+> **Reminder:** `/nfs-apps` is a stand-in for the path to your remote folder There are several scripts and a config file used to configure the Compute Optimizer CLI Wrapper known as `exorun`:
 
 * `./scripts/controller/integrate-xspot/config/dockerWrapper.toml`:
   * used by system administrators to customize the CLI wrapper installation.
@@ -76,7 +76,7 @@
       * The ration can be in the range: 0 <= X < 1
     * `container_startup`: location of `startup.sh`
     * `job_startup_*` and `job_cleanup_*`: the location of the startup and cleanup scripts
-    * `runtime`: the runtime to use when starting a new container. `runxc` to run inside of X-Spot, `runc` to use the default docker runtime
+    * `runtime`: the runtime to use when starting a new container. `runxc` to run inside of Compute Optimizer, `runc` to use the default docker runtime
 * `./scripts/controller/integrate-xspot/scripts/startup.sh`:
   * configures necessary resources inside of the container for the CLI wrapper, creates the user account and groups, sets up hostname of the container, etc.
 * The following scripts are used to by the customer to make configurations on how the docker containers startup/stop
@@ -89,9 +89,9 @@
   * `./scripts/controller/integrate-xspot/scripts/job_cleanup_root.sh`:
     * anything that needs to happen after the job finishes as the root user
 
-### X-Spot Installation <a href="#user-content-x-spot-installation" id="user-content-x-spot-installation"></a>
+### Compute Optimizer Installation <a href="#user-content-compute optimizer-installation" id="user-content-compute optimizer-installation"></a>
 
-Install X-Spot components.
+Install Compute Optimizer components.
 
 > **NOTE:**
 >
@@ -107,7 +107,7 @@ Install X-Spot components.
 
 | Who? | On which system?  | In which directory?             |
 | ---- | ----------------- | ------------------------------- |
-| root | X-Spot controller | /nfs-apps/exostellar/onboarding |
+| root | Compute Optimizer controller | /nfs-apps/exostellar/onboarding |
 
 > **Reminder:** `/nfs-apps` is a stand-in for the path to your remote folder
 
