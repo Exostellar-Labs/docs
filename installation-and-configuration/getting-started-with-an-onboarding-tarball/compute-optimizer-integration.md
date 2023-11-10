@@ -1,6 +1,6 @@
 # Compute Optimizer Integration
 
-### Compute Optimizer Configuration <a href="#user-content-compute optimizer-configuration" id="user-content-compute optimizer-configuration"></a>
+### Compute Optimizer Configuration <a href="#user-content-compute-optimizer-configuration" id="user-content-compute-optimizer-configuration"></a>
 
 > **Note:**
 >
@@ -25,7 +25,7 @@
    * Main configs to tune:
      * | Expression                  | Explanation                                                                                                                           |
        | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-       | `ami =`                     | The worker AMI ID from [Compute Optimizer Worker AMI Preparation step](https://github.com/Exostellar-Labs/docs#compute optimizer-worker-ami-preparation). . |
+       | `ami =`                     | The worker AMI ID from [Compute Optimizer Worker AMI Preparation step](https://github.com/Exostellar-Labs/docs#compute-optimizer-worker-ami-preparation). . |
        | `overlay_prefix =`          | This class C network definition cannot overlap with Compute Optimizer controller's subnet.                                                       |
        | `on_demand_types =`         | List of instance type and families for on-demand instances.                                                                           |
        | `spot_fleet_types =`        | List of instance type and families for spot instances.                                                                                |
@@ -37,7 +37,7 @@
        [license]
 
        #Specify the floating key for the license system. For a mechanism other than floating license, use one of the following values:
-       key = "compute optimizer-metering"
+       key = "compute-optimizer-metering"
        ```
 3. (optional) Log files by default reside in `/var/log/xspot` on each Compute Optimizer controller.
    *   To modify the default behavior, edit the log file configuration:
@@ -89,7 +89,7 @@
   * `./scripts/controller/integrate-xspot/scripts/job_cleanup_root.sh`:
     * anything that needs to happen after the job finishes as the root user
 
-### Compute Optimizer Installation <a href="#user-content-compute optimizer-installation" id="user-content-compute optimizer-installation"></a>
+### Compute Optimizer Installation <a href="#user-content-compute-optimizer-installation" id="user-content-compute-optimizer-installation"></a>
 
 Install Compute Optimizer components.
 

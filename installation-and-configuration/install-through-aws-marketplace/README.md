@@ -20,20 +20,20 @@ Compute Optimizer currently supports 64-bit applications. 32-bit applications ar
 * Step 2: Create a Security Group
 * Step 3: Create an IAM role with least-privilege permissions
 
-### [Installing Compute Optimizer Controller on EC2](installing-compute optimizer-controller-on-ec2.md)
+### [Installing Compute Optimizer Controller on EC2](installing-compute-optimizer-controller-on-ec2.md)
 
 * Step 1: Subscribe to Compute Optimizer Controller
 * Step 2: Launch the Instance Using the Created Resources
 
-### [Subscribing to Compute Optimizer Worker](subscribing-to-compute optimizer-worker.md)
+### [Subscribing to Compute Optimizer Worker](subscribing-to-compute-optimizer-worker.md)
 
 * Step 1: Log into AWS Marketplace
 * Step 2: Subscribe Compute Optimizer Worker
 * Step 3: Obtain Compute Optimizer Worker’s AMI ID
 
-### [Integrating Compute Optimizer Controller and Worker](integrating-compute optimizer-controller-and-worker.md)
+### [Integrating Compute Optimizer Controller and Worker](integrating-compute-optimizer-controller-and-worker.md)
 
-### [Validating Compute Optimizer Installation](validating-compute optimizer-installation.md)
+### [Validating Compute Optimizer Installation](validating-compute-optimizer-installation.md)
 
 
 

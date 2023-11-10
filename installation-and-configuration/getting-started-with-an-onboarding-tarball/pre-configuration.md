@@ -92,7 +92,7 @@ layout:
 
        > **NOTE:**
        >
-       > Later on during [validations](compute optimizer-validation.md) specific information unique to the site will need to be tested and validated. For example, mounting of remote filesystems may be accomplished in several ways, so a final decision will be made during validation and the configuration will be finalized at that time.
+       > Later on during [validations](compute-optimizer-validation.md) specific information unique to the site will need to be tested and validated. For example, mounting of remote filesystems may be accomplished in several ways, so a final decision will be made during validation and the configuration will be finalized at that time.
    *   Amazon FSx for NetApp ONTAP handling
 
        > **IMPORTANT:**
@@ -112,7 +112,7 @@ layout:
        >
        > If more volumes are required, these lines should be repeated for each volume.
        >
-       > The purpose of these steps is to make sure that ONTAP stroage is mounted correctly on the Compute Optimizer worker node. In the [step of Compute Optimizer Validation](compute optimizer-validation.md), you can login to the worker node with ssh or Session Manager, and check if all ONTAP storage folders are mounted correctly.
+       > The purpose of these steps is to make sure that ONTAP stroage is mounted correctly on the Compute Optimizer worker node. In the [step of Compute Optimizer Validation](compute-optimizer-validation.md), you can login to the worker node with ssh or Session Manager, and check if all ONTAP storage folders are mounted correctly.
        >
        > When there are multiple NetAPP ONTAP Servers in play, the minimum requirement is one volume per server should be specified in the `customize_worker_ami.sh` script as shown in the example above. Make sure all the mount points are listed from `conf/env.cfg`'s ONTAP\_FOLDERS.
 2.  Once edited, the following command will report if any errors are found in conf/env.cfg

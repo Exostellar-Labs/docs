@@ -61,5 +61,5 @@
           > **NOTE:**
           >
           > It is recommended to tag this Compute Optimizer Release Version as found in the `onboarding/conf/env.cfg` file so that compatability can be easily tracked and compared in the future.
-      * Upon completion, make note of the AMI ID, which will be required in the [Compute Optimizer Integration step](compute optimizer-integration.md).
+      * Upon completion, make note of the AMI ID, which will be required in the [Compute Optimizer Integration step](compute-optimizer-integration.md).
       * **Note:** It can take a few minutes for the AMI ID to display as `available` in the AWS Console.

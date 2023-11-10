@@ -203,7 +203,7 @@ You can also add or override the tags by manually specifying instance\_tags and 
 
 ### `[worker]` <a href="#worker" id="worker"></a>
 
-#### Fields that are used to configure Compute Optimizer workers <a href="#fields-that-are-used-to-configure-compute optimizer-workers" id="fields-that-are-used-to-configure-compute optimizer-workers"></a>
+#### Fields that are used to configure Compute Optimizer workers <a href="#fields-that-are-used-to-configure-compute-optimizer-workers" id="fields-that-are-used-to-configure-compute-optimizer-workers"></a>
 
 `on_demand_types` - A list of all instance types and/or instance type families to use for on demand workers\
 For any instance size (cpu and mem) in on\_demand\_types there should be a worker of\
@@ -258,7 +258,7 @@ the maximum default\_container\_mem you can set is 32GB - 2GB = 30GB (30720 MB)
 
 ### `[network]` <a href="#network" id="network"></a>
 
-#### Section used to configure the internal overlay network used by Compute Optimizer for a controller and its workers and containers <a href="#section-used-to-configure-the-internal-overlay-network-used-by-compute optimizer-for-a-controller-and-its-worke" id="section-used-to-configure-the-internal-overlay-network-used-by-compute optimizer-for-a-controller-and-its-worke"></a>
+#### Section used to configure the internal overlay network used by Compute Optimizer for a controller and its workers and containers <a href="#section-used-to-configure-the-internal-overlay-network-used-by-compute-optimizer-for-a-controller-and-its-worke" id="section-used-to-configure-the-internal-overlay-network-used-by-compute-optimizer-for-a-controller-and-its-worke"></a>
 
 `overlay_prefix` - The prefix for the internal overlay network used by Compute Optimizer (24 bits)\
 Example: a "10.0.0." prefix means a CIDR block: 10.0.0.0/24\
@@ -272,7 +272,7 @@ Note - The docker mtu is configured separately in /etc/docker/daemon.json
 
 ### `[exo]` <a href="#exo" id="exo"></a>
 
-### Section to configure Compute Optimizer runtime options shared by controller and worker runtime <a href="#section-to-configure-compute optimizer-runtime-options-shared-by-controller-and-worker-runtime" id="section-to-configure-compute optimizer-runtime-options-shared-by-controller-and-worker-runtime"></a>
+### Section to configure Compute Optimizer runtime options shared by controller and worker runtime <a href="#section-to-configure-compute-optimizer-runtime-options-shared-by-controller-and-worker-runtime" id="section-to-configure-compute-optimizer-runtime-options-shared-by-controller-and-worker-runtime"></a>
 
 `worker_grpc_port` - The default worker grpc port, listened on by worker nodes, and dialed by the controller\
 **Default**: 1235
@@ -415,7 +415,7 @@ Note: to enable file based scratch storage the config parameters beginning with 
 `key` - Specify the floating key for the license system.\
 For a mechanism other than floating license, use one of the following values:
 
-* marketplace: "compute optimizer-marketplace"
-* metering:    "compute optimizer-metering"
+* marketplace: "compute-optimizer-marketplace"
+* metering:    "compute-optimizer-metering"
 
 **Default**: If neither the designated 'marketplace' or 'metering' string are matched, Compute Optimizer will assume a floating key should be passed

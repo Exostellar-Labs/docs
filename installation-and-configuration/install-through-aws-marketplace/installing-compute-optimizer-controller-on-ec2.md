@@ -16,9 +16,9 @@ layout:
 
 Go to **EC2 > Instances > Launch an instance**
 
-### Step 1: Subscribe to Compute Optimizer Controller <a href="#step-1-subscribe-to-compute optimizer-controller" id="step-1-subscribe-to-compute optimizer-controller"></a>
+### Step 1: Subscribe to Compute Optimizer Controller <a href="#step-1-subscribe-to-compute-optimizer-controller" id="step-1-subscribe-to-compute-optimizer-controller"></a>
 
-For **Application and OS Images (Amazon Machine Image)**, search for "compute optimizer controller".
+For **Application and OS Images (Amazon Machine Image)**, search for "compute-optimizer controller".
 
 <figure><img src="../../.gitbook/assets/image (3).png" alt=""><figcaption><p>Launch Compute Optimizer Controller on an EC2 Instance</p></figcaption></figure>
 

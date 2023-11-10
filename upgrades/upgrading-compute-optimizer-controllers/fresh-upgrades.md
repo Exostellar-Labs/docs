@@ -1,6 +1,6 @@
 # Fresh Upgrades
 
-Starting from scratch basically means following the onboarding procedure which you are already familiar with. For this reason, it may appear like the path of least resistance. It is the recommended path for upgrades because it is a well-known path. Provision a new VM to be an Compute Optimizer controller and start from the [Compute Optimizer Worker AMI Preparation step](../../installation-and-configuration/getting-started-with-an-onboarding-tarball/compute optimizer-worker-ami-preparation.md).
+Starting from scratch basically means following the onboarding procedure which you are already familiar with. For this reason, it may appear like the path of least resistance. It is the recommended path for upgrades because it is a well-known path. Provision a new VM to be an Compute Optimizer controller and start from the [Compute Optimizer Worker AMI Preparation step](../../installation-and-configuration/getting-started-with-an-onboarding-tarball/compute-optimizer-worker-ami-preparation.md).
 
 ### Upgrading Configuration <a href="#user-content-upgrading-configuration" id="user-content-upgrading-configuration"></a>
 
@@ -51,7 +51,7 @@ It is possible to leverage assets from a previous Compute Optimizer installation
         make rebuild-image
         ```
 5. Upgrade Compute Optimizer worker
-   * Create a new scratch VM as in the [Compute Optimizer Worker Preparation step above](../../installation-and-configuration/getting-started-with-an-onboarding-tarball/compute optimizer-worker-ami-preparation.md).
+   * Create a new scratch VM as in the [Compute Optimizer Worker Preparation step above](../../installation-and-configuration/getting-started-with-an-onboarding-tarball/compute-optimizer-worker-ami-preparation.md).
    * Update the ami ID in `./scripts/controller/integrate-xspot/config.toml`
 6.  Upgrade Compute Optimizer controller
 

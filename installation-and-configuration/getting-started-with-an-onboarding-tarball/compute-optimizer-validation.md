@@ -1,6 +1,6 @@
 # Compute Optimizer Validation
 
-### Compute Optimizer Validation as Root <a href="#user-content-compute optimizer-validation-as-root" id="user-content-compute optimizer-validation-as-root"></a>
+### Compute Optimizer Validation as Root <a href="#user-content-compute-optimizer-validation-as-root" id="user-content-compute-optimizer-validation-as-root"></a>
 
 > **Note:**
 >
@@ -90,7 +90,7 @@ Validate Compute Optimizer installation and docker images.
 10. Modifications to the container or sandbox environment are expected, which will require editing the `startup.sh` script located at `/etc/xspot/scripts/`.
     * Also possibly the `Dockerfile` and/or `/etc/xspot/config/dockerWrapper.toml` may need changes.
 
-### Compute Optimizer Validation as User <a href="#user-content-compute optimizer-validation-as-user" id="user-content-compute optimizer-validation-as-user"></a>
+### Compute Optimizer Validation as User <a href="#user-content-compute-optimizer-validation-as-user" id="user-content-compute-optimizer-validation-as-user"></a>
 
 > **Note:**
 >
@@ -147,7 +147,7 @@ Test with a valid or real workload.
         xspot rm <worker-id-hash>
         ```
 
-### Compute Optimizer Validation When Satisfied <a href="#user-content-compute optimizer-validation-when-satisfied" id="user-content-compute optimizer-validation-when-satisfied"></a>
+### Compute Optimizer Validation When Satisfied <a href="#user-content-compute-optimizer-validation-when-satisfied" id="user-content-compute-optimizer-validation-when-satisfied"></a>
 
 > **Note:**
 >
