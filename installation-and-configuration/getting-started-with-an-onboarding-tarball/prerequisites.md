@@ -44,7 +44,11 @@ layout:
    * In addition to the inbound rules that are required by your application (such as the SSH port, or licensing and license-vendor-daemon ports), it should also allow all internal traffic within your subnet.
    * For example, if your subnet uses 172.31.0.0/20, your security group should allow "All traffic" from 172.31.0.0/20.
    * You can put the controller and workers in different security groups as long as both of them allow all internal traffic.
-7.  Create an IAM role for the Compute Optimizer controller
+7. Prepare a base AMI to use, it can be one of the following:
+   1. Subscribe to [Exostellar's Computer Optimizer Worker](https://aws.amazon.com/marketplace/pp/prodview-joaaqojtokw3s?sr=0-2\&ref\_=beagle\&applicationId=AWSMPContessa)
+   2. Subscribe to [CentOS 7 (x86\_64) base image](https://aws.amazon.com/marketplace/pp/prodview-foff247vr2zfw?sr=0-1\&ref\_=beagle\&applicationId=AWS-EC2-Console)
+   3. Make your own CentOS7 (x86\_64) AMI&#x20;
+8.  Create an IAM role for the Compute Optimizer controller
 
     * Compute Optimizer makes requests to Amazon Web Services.
     * To support that, you need to create and attach an IAM role to the instance running the Compute Optimizer controller.
@@ -342,21 +346,21 @@ layout:
 
     7.1. Changelog: 2023-08-11 : added ec2:DescribeInstanceTypes into the IAM policy.\
 
-8. Make note of linux and AWS services that are likely to be required, as well as any pertinent version information. Some filesystem or directory services may require additional configuration and validation to ensure compatability. The services listed below fall into two general categories: authentication or directory services (ldap, sssd) and remote-filesystems (Lustre, NetApp ONTAP, autofs). If a required service is not listed below but is required, please let support know about your needs and use-case.
+9. Make note of linux and AWS services that are likely to be required, as well as any pertinent version information. Some filesystem or directory services may require additional configuration and validation to ensure compatability. The services listed below fall into two general categories: authentication or directory services (ldap, sssd) and remote-filesystems (Lustre, NetApp ONTAP, autofs). If a required service is not listed below but is required, please let support know about your needs and use-case.
    * Amazon FSx for Lustre
    * Amazon FSx for NetApp ONTAP
    * autofs
    * sssd
    * ldap
-9. Compute Optimizer currently supports 64-bit applications. 32-bit applications are not yet supported.
-10. There are two limiting factors in terms of how many workers or containers can be started on one Compute Optimizer controller:
+10. Compute Optimizer currently supports 64-bit applications. 32-bit applications are not yet supported.
+11. There are two limiting factors in terms of how many workers or containers can be started on one Compute Optimizer controller:
 
     > **EQUATION:** Num of containers + num of workers \* 2 <= 245.
 
     * This is due to how Compute Optimizer manages its internal metadata connections. Based on this equation, the max number of containers that you can start depends on how you configure Compute Optimizer. Typically we will start one worker for each container, so that effectively limits the number of containers (or workers) to be 81. But if you configure Compute Optimizer to pack multiple containers on one worker, then the number of containers can be higher.
     * Root file system usage for all the containers cannot exceed the total disk space available to docker for storage. For example, if we are expecting that each container will generate 30GB data on the root file system, and the docker thin pool device has a 300GB SSD, then we may run into issues if 10 or more containers are concurrently using 30G of storage to run their jobs, with some failing due to storage errors, "No space left on device."
     * The real limit of how many containers we can start on a single controller will be the smaller number of the two mentioned above. For the controller, CPU usage is typically not a concern, since the disk space for docker images is the bottleneck. But we recommend 4 CPUs (2 cores) and 8GB memory and a local SSD for the controller. On AWS this would be a c5d.xlarge or m5d.xlarge VM, and can go with other instance types depending on the storage requirements.
-11. VMs or EC2 instances required for this guide:
+12. VMs or EC2 instances required for this guide:
     *   HPC Cluster Environment
 
         <table><thead><tr><th width="161">VM Reference Name</th><th width="120">Required?</th><th width="162" align="center">Recommended Instance Type</th><th align="right">Comment</th></tr></thead><tbody><tr><td>Compute Optimizer controller</td><td>Yes</td><td align="center">m5d.xlarge or an instance with "d" before the period</td><td align="right">Most steps take place on this node. Ideally it is a fully functional and validated compute node in the cluster.</td></tr><tr><td>Compute Optimizer worker AMI builder</td><td>Yes</td><td align="center">m5.xlarge or c5.xlarge</td><td align="right">This VM will only exist for 15 - 30 minutes and can be terminated thereafter.</td></tr></tbody></table>
