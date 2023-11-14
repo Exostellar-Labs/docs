@@ -44,7 +44,7 @@ layout:
    * In addition to the inbound rules that are required by your application (such as the SSH port, or licensing and license-vendor-daemon ports), it should also allow all internal traffic within your subnet.
    * For example, if your subnet uses 172.31.0.0/20, your security group should allow "All traffic" from 172.31.0.0/20.
    * You can put the controller and workers in different security groups as long as both of them allow all internal traffic.
-7. Prepare a base AMI to use, it can be one of the following:
+7. Prepare a base AMI to use. It can be one of the following:
    1. Subscribe to [Exostellar's Computer Optimizer Worker](https://aws.amazon.com/marketplace/pp/prodview-joaaqojtokw3s?sr=0-2\&ref\_=beagle\&applicationId=AWSMPContessa)
    2. Subscribe to [CentOS 7 (x86\_64) base image](https://aws.amazon.com/marketplace/pp/prodview-foff247vr2zfw?sr=0-1\&ref\_=beagle\&applicationId=AWS-EC2-Console)
    3. Make your own CentOS7 (x86\_64) AMI&#x20;
