@@ -6,8 +6,8 @@
 >
 > You should be :
 
-| Who? | On which system?  | In which directory?             |
-| ---- | ----------------- | ------------------------------- |
+| Who? | On which system?             | In which directory?             |
+| ---- | ---------------------------- | ------------------------------- |
 | root | Compute Optimizer controller | /nfs-apps/exostellar/onboarding |
 
 > **Reminder:** `/nfs-apps` is a stand-in for the path to your remote folder
@@ -23,13 +23,13 @@
 
        * If you would like to introduce more AWS Tagging, copy as necessary the line starting with `#i_key2` and set key-value pairs.
    * Main configs to tune:
-     * | Expression                  | Explanation                                                                                                                           |
-       | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+     * | Expression                  | Explanation                                                                                                                                                 |
+       | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
        | `ami =`                     | The worker AMI ID from [Compute Optimizer Worker AMI Preparation step](https://github.com/Exostellar-Labs/docs#compute-optimizer-worker-ami-preparation). . |
-       | `overlay_prefix =`          | This class C network definition cannot overlap with Compute Optimizer controller's subnet.                                                       |
-       | `on_demand_types =`         | List of instance type and families for on-demand instances.                                                                           |
-       | `spot_fleet_types =`        | List of instance type and families for spot instances.                                                                                |
-       | `hyperthreading_disabled =` | Setting to true disables hyperthreading on worker instances.                                                                          |
+       | `overlay_prefix =`          | This class C network definition cannot overlap with Compute Optimizer controller's subnet.                                                                  |
+       | `on_demand_types =`         | List of instance type and families for on-demand instances.                                                                                                 |
+       | `spot_fleet_types =`        | List of instance type and families for spot instances.                                                                                                      |
+       | `hyperthreading_disabled =` | Setting to true disables hyperthreading on worker instances.                                                                                                |
 2. The following sections of the file may need updates for your site:
    *   Licensing updates to `./scripts/controller/integrate-xspot/config/config.toml`:
 
@@ -37,7 +37,7 @@
        [license]
 
        #Specify the floating key for the license system. For a mechanism other than floating license, use one of the following values:
-       key = "compute-optimizer-metering"
+       key = "x-spot-metering"
        ```
 3. (optional) Log files by default reside in `/var/log/xspot` on each Compute Optimizer controller.
    *   To modify the default behavior, edit the log file configuration:
@@ -54,8 +54,8 @@
 >
 > You should be :
 
-| Who? | On which system?  | In which directory?             |
-| ---- | ----------------- | ------------------------------- |
+| Who? | On which system?             | In which directory?             |
+| ---- | ---------------------------- | ------------------------------- |
 | root | Compute Optimizer controller | /nfs-apps/exostellar/onboarding |
 
 > **Reminder:** `/nfs-apps` is a stand-in for the path to your remote folder There are several scripts and a config file used to configure the Compute Optimizer CLI Wrapper known as `exorun`:
@@ -105,8 +105,8 @@ Install Compute Optimizer components.
 >
 > You should be :
 
-| Who? | On which system?  | In which directory?             |
-| ---- | ----------------- | ------------------------------- |
+| Who? | On which system?             | In which directory?             |
+| ---- | ---------------------------- | ------------------------------- |
 | root | Compute Optimizer controller | /nfs-apps/exostellar/onboarding |
 
 > **Reminder:** `/nfs-apps` is a stand-in for the path to your remote folder
