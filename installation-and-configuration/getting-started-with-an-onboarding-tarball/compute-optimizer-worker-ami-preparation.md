@@ -1,4 +1,4 @@
-# Compute Optimizer Worker AMI Preparation
+# X-Infrastructure Optimizer Worker AMI Preparation
 
 > **NOTE:**
 >
@@ -20,7 +20,7 @@
 
     | Who? | On which system?          | In which directory? |
     | ---- | ------------------------- | ------------------- |
-    | root | Compute Optimizer worker AMI Builder | /tmp                |
+    | root | X-Infrastructure Optimizer worker AMI Builder | /tmp                |
 
     * Ensure the onboarding folder is available on this new VM:
       * Copy the onboarding assets to `/tmp`
@@ -60,6 +60,6 @@
 
           > **NOTE:**
           >
-          > It is recommended to tag this Compute Optimizer Release Version as found in the `onboarding/conf/env.cfg` file so that compatability can be easily tracked and compared in the future.
-      * Upon completion, make note of the AMI ID, which will be required in the [Compute Optimizer Integration step](compute-optimizer-integration.md).
+          > It is recommended to tag this X-Infrastructure Optimizer Release Version as found in the `onboarding/conf/env.cfg` file so that compatability can be easily tracked and compared in the future.
+      * Upon completion, make note of the AMI ID, which will be required in the [X-Infrastructure Optimizer Integration step](x-infrastructure-optimizer-integration.md).
       * **Note:** It can take a few minutes for the AMI ID to display as `available` in the AWS Console.

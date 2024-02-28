@@ -23,10 +23,10 @@ layout:
        > Amazon Linux 2023 instances are not supported. See [Amazon Documentation](https://docs.aws.amazon.com/linux/al2023/ug/compare-with-al2.html#epel) for more information.
    * If proceeding minimally with one VM only, install the targeted workflow's application requirements and validate proper execution of the workflow for end-users as required prior to typical go-live or release-to-production.
    * If proceeding with an existing HPC Cluster, all workflows, authentication systems, and licensing requirements should be fully validated and operational.
-3. Create or choose a VPC and a subnet that you want to put your Compute Optimizer controller and workers in.
-   * Compute Optimizer creates an internal overlay network with CIDR 192.168.137.0/24 by default.
+3. Create or choose a VPC and a subnet that you want to put your X-Infrastructure Optimizer controller and workers in.
+   * X-Infrastructure Optimizer creates an internal overlay network with CIDR 192.168.137.0/24 by default.
    * We need to ensure the overlay network does not conflict the CIDR in your VPC.
-   * If there is any overlapping, we will modify[ Compute Optimizer configurations](pre-configuration.md) as described later.
+   * If there is any overlapping, we will modify[ X-Infrastructure Optimizer configurations](pre-configuration.md) as described later.
 4. Add a NAT gateway to your subnet.
 5. Allow access to the following websites and URLs:
    * AWS EC2 API Endpoint:
@@ -38,9 +38,9 @@ layout:
      * [https://13.66.175.108](https://13.66.175.108/)
    * Microsoft eventhub API endpoint:
      * TBD
-   * (optional) Compute Optimizer advisor service endpoint:
+   * (optional) X-Infrastructure Optimizer advisor service endpoint:
      * [https://3.135.60.35](https://3.135.60.35/)
-6. Create a security group for Compute Optimizer controller and workers.
+6. Create a security group for X-Infrastructure Optimizer controller and workers.
    * In addition to the inbound rules that are required by your application (such as the SSH port, or licensing and license-vendor-daemon ports), it should also allow all internal traffic within your subnet.
    * For example, if your subnet uses 172.31.0.0/20, your security group should allow "All traffic" from 172.31.0.0/20.
    * You can put the controller and workers in different security groups as long as both of them allow all internal traffic.
@@ -48,10 +48,10 @@ layout:
    1. Subscribe to [Exostellar's Computer Optimizer Worker](https://aws.amazon.com/marketplace/pp/prodview-joaaqojtokw3s?sr=0-2\&ref\_=beagle\&applicationId=AWSMPContessa)
    2. Subscribe to [CentOS 7 (x86\_64) base image](https://aws.amazon.com/marketplace/pp/prodview-foff247vr2zfw?sr=0-1\&ref\_=beagle\&applicationId=AWS-EC2-Console)
    3. Make your own CentOS7 (x86\_64) AMI&#x20;
-8.  Create an IAM role for the Compute Optimizer controller
+8.  Create an IAM role for the X-Infrastructure Optimizer controller
 
-    * Compute Optimizer makes requests to Amazon Web Services.
-    * To support that, you need to create and attach an IAM role to the instance running the Compute Optimizer controller.
+    * X-Infrastructure Optimizer makes requests to Amazon Web Services.
+    * To support that, you need to create and attach an IAM role to the instance running the X-Infrastructure Optimizer controller.
     * The included policy iam-policy.json needs to be modified and attached to the role. Statement blocks with an Sid starting with "Optional" can be removed if not required.
     * The following variables need to be replaced in the policy document before attaching it to a role:
       * \<REGION>
@@ -342,7 +342,7 @@ layout:
 
     > **IMPORTANT:**
     >
-    > This role will need to be attached to **every Compute Optimizer controller**.
+    > This role will need to be attached to **every X-Infrastructure Optimizer controller**.
 
     7.1. Changelog: 2023-08-11 : added ec2:DescribeInstanceTypes into the IAM policy.\
 
@@ -352,18 +352,18 @@ layout:
    * autofs
    * sssd
    * ldap
-10. Compute Optimizer currently supports 64-bit applications. 32-bit applications are not yet supported.
-11. There are two limiting factors in terms of how many workers or containers can be started on one Compute Optimizer controller:
+10. X-Infrastructure Optimizer currently supports 64-bit applications. 32-bit applications are not yet supported.
+11. There are two limiting factors in terms of how many workers or containers can be started on one X-Infrastructure Optimizer controller:
 
     > **EQUATION:** Num of containers + num of workers \* 2 <= 245.
 
-    * This is due to how Compute Optimizer manages its internal metadata connections. Based on this equation, the max number of containers that you can start depends on how you configure Compute Optimizer. Typically we will start one worker for each container, so that effectively limits the number of containers (or workers) to be 81. But if you configure Compute Optimizer to pack multiple containers on one worker, then the number of containers can be higher.
+    * This is due to how X-Infrastructure Optimizer manages its internal metadata connections. Based on this equation, the max number of containers that you can start depends on how you configure X-Infrastructure Optimizer. Typically we will start one worker for each container, so that effectively limits the number of containers (or workers) to be 81. But if you configure X-Infrastructure Optimizer to pack multiple containers on one worker, then the number of containers can be higher.
     * Root file system usage for all the containers cannot exceed the total disk space available to docker for storage. For example, if we are expecting that each container will generate 30GB data on the root file system, and the docker thin pool device has a 300GB SSD, then we may run into issues if 10 or more containers are concurrently using 30G of storage to run their jobs, with some failing due to storage errors, "No space left on device."
     * The real limit of how many containers we can start on a single controller will be the smaller number of the two mentioned above. For the controller, CPU usage is typically not a concern, since the disk space for docker images is the bottleneck. But we recommend 4 CPUs (2 cores) and 8GB memory and a local SSD for the controller. On AWS this would be a c5d.xlarge or m5d.xlarge VM, and can go with other instance types depending on the storage requirements.
 12. VMs or EC2 instances required for this guide:
     *   HPC Cluster Environment
 
-        <table><thead><tr><th width="161">VM Reference Name</th><th width="120">Required?</th><th width="162" align="center">Recommended Instance Type</th><th align="right">Comment</th></tr></thead><tbody><tr><td>Compute Optimizer controller</td><td>Yes</td><td align="center">m5d.xlarge or an instance with "d" before the period</td><td align="right">Most steps take place on this node. Ideally it is a fully functional and validated compute node in the cluster.</td></tr><tr><td>Compute Optimizer worker AMI builder</td><td>Yes</td><td align="center">m5.xlarge or c5.xlarge</td><td align="right">This VM will only exist for 15 - 30 minutes and can be terminated thereafter.</td></tr></tbody></table>
+        <table><thead><tr><th width="161">VM Reference Name</th><th width="120">Required?</th><th width="162" align="center">Recommended Instance Type</th><th align="right">Comment</th></tr></thead><tbody><tr><td>X-Infrastructure Optimizer controller</td><td>Yes</td><td align="center">m5d.xlarge or an instance with "d" before the period</td><td align="right">Most steps take place on this node. Ideally it is a fully functional and validated compute node in the cluster.</td></tr><tr><td>X-Infrastructure Optimizer worker AMI builder</td><td>Yes</td><td align="center">m5.xlarge or c5.xlarge</td><td align="right">This VM will only exist for 15 - 30 minutes and can be terminated thereafter.</td></tr></tbody></table>
 
         > **IMPORTANT:**
         >
@@ -371,4 +371,4 @@ layout:
 
         > **TAKE-AWAY:**
         >
-        > Minimum requirements are workflow and environment dependent. It's recommended to start with m5d.xlarge instance for Compute Optimizer controllers, which has a dedicated 150GB SSD for docker storage. m5d.2xlarge has a 300GB SSD, so could run roughly double the number of jobs. See [AWS Instance Descriptsion](https://aws.amazon.com/ec2/instance-types/) for more information.
+        > Minimum requirements are workflow and environment dependent. It's recommended to start with m5d.xlarge instance for X-Infrastructure Optimizer controllers, which has a dedicated 150GB SSD for docker storage. m5d.2xlarge has a 300GB SSD, so could run roughly double the number of jobs. See [AWS Instance Descriptsion](https://aws.amazon.com/ec2/instance-types/) for more information.

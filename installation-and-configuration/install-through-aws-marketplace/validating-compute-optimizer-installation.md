@@ -1,13 +1,13 @@
-# Validating Compute Optimizer Installation
+# Validating X-Infrastructure Optimizer Installation
 
-Run the following command to validate the Compute Optimizer:
+Run the following command to validate the X-Infrastructure Optimizer:
 
 ```
 xspot check -f
 ```
 
 {% hint style="success" %}
-The Compute Optimizer should pass all prerequisites as shown below:
+The X-Infrastructure Optimizer should pass all prerequisites as shown below:
 {% endhint %}
 
 <figure><img src="../../.gitbook/assets/image (11).png" alt=""><figcaption></figcaption></figure>
@@ -18,7 +18,7 @@ Turn the scheduler off:
 xspot scheduler off
 ```
 
-Request an on-demand instance from the Compute Optimizer Controller:
+Request an on-demand instance from the X-Infrastructure Optimizer Controller:
 
 ```
 xspot add -c 4 -m 8192

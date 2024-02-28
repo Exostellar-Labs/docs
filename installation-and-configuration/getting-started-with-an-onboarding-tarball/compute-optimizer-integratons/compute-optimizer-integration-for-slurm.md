@@ -2,7 +2,7 @@
 description: Configuring CLI plug-in for Slurm
 ---
 
-# Compute Optimizer Integration for SLURM
+# X-Infrastructure Optimizer Integration for SLURM
 
 This document covers the configuration of the Slurm job scheduler to rewrite submitted jobs to execute on a controller node running X-spot.
 

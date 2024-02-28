@@ -1,20 +1,20 @@
 # Fresh Upgrades
 
-Starting from scratch basically means following the onboarding procedure which you are already familiar with. For this reason, it may appear like the path of least resistance. It is the recommended path for upgrades because it is a well-known path. Provision a new VM to be an Compute Optimizer controller and start from the [Compute Optimizer Worker AMI Preparation step](../../installation-and-configuration/getting-started-with-an-onboarding-tarball/compute-optimizer-worker-ami-preparation.md).
+Starting from scratch basically means following the onboarding procedure which you are already familiar with. For this reason, it may appear like the path of least resistance. It is the recommended path for upgrades because it is a well-known path. Provision a new VM to be an X-Infrastructure Optimizer controller and start from the [X-Infrastructure Optimizer Worker AMI Preparation step](../../installation-and-configuration/getting-started-with-an-onboarding-tarball/x-infrastructure-optimizer-worker-ami-preparation.md).
 
 ### Upgrading Configuration <a href="#user-content-upgrading-configuration" id="user-content-upgrading-configuration"></a>
 
-It is possible to leverage assets from a previous Compute Optimizer installation to avoid repeating steps. What follows are the steps required to save a little time as compared to the Fresh Upgrades option above.
+It is possible to leverage assets from a previous X-Infrastructure Optimizer installation to avoid repeating steps. What follows are the steps required to save a little time as compared to the Fresh Upgrades option above.
 
 > **NOTE:**
 >
-> This process should not take place if the Compute Optimizer controller is in use. The node should be devoid of any jobs and prevented from accepting jobs while the upgrade takes place. HPC Admins can drain, offline, or otherwise keep the node idle depending on the specifics of the environment. **Note:**
+> This process should not take place if the X-Infrastructure Optimizer controller is in use. The node should be devoid of any jobs and prevented from accepting jobs while the upgrade takes place. HPC Admins can drain, offline, or otherwise keep the node idle depending on the specifics of the environment. **Note:**
 >
 > You should be :
 
 | Who? | On which system?  | In which directory?             |
 | ---- | ----------------- | ------------------------------- |
-| root | Compute Optimizer controller | /nfs-apps/exostellar/onboarding |
+| root | X-Infrastructure Optimizer controller | /nfs-apps/exostellar/onboarding |
 
 > **Reminder:** `/nfs-apps` is a stand-in for the path to your remote folder
 
@@ -50,10 +50,10 @@ It is possible to leverage assets from a previous Compute Optimizer installation
       * ```
         make rebuild-image
         ```
-5. Upgrade Compute Optimizer worker
-   * Create a new scratch VM as in the [Compute Optimizer Worker Preparation step above](../../installation-and-configuration/getting-started-with-an-onboarding-tarball/compute-optimizer-worker-ami-preparation.md).
+5. Upgrade X-Infrastructure Optimizer worker
+   * Create a new scratch VM as in the [X-Infrastructure Optimizer Worker Preparation step above](../../installation-and-configuration/getting-started-with-an-onboarding-tarball/x-infrastructure-optimizer-worker-ami-preparation.md).
    * Update the ami ID in `./scripts/controller/integrate-xspot/config.toml`
-6.  Upgrade Compute Optimizer controller
+6.  Upgrade X-Infrastructure Optimizer controller
 
     ```
     make upgrade
@@ -91,11 +91,11 @@ It is possible to leverage assets from a previous Compute Optimizer installation
     ... post-docker.sh: Finished.
     ... systemd: Started Post Docker Configuration.
     ```
-9. From [Cluster Deployment step above](../../installation-and-configuration/getting-started-with-an-onboarding-tarball/cluster-deployment.md) you may prefer to create an AMI from the updated Compute Optimizer controller.
+9. From [Cluster Deployment step above](../../installation-and-configuration/getting-started-with-an-onboarding-tarball/cluster-deployment.md) you may prefer to create an AMI from the updated X-Infrastructure Optimizer controller.
 
 ### Upgrading Cluster Deployments <a href="#user-content-upgrading-cluster-deployments" id="user-content-upgrading-cluster-deployments"></a>
 
-Rolling upgrades or swing migrations make a lot of sense in large environments where downtime is to be avoided. The approach is relatively simple, but we'll cover the basic ideas here for your consideration. This is applicable when an environment has multiple or many Compute Optimizer controllers in production.
+Rolling upgrades or swing migrations make a lot of sense in large environments where downtime is to be avoided. The approach is relatively simple, but we'll cover the basic ideas here for your consideration. This is applicable when an environment has multiple or many X-Infrastructure Optimizer controllers in production.
 
 > **Note:**
 >
@@ -103,14 +103,14 @@ Rolling upgrades or swing migrations make a lot of sense in large environments w
 
 | Who? | On which system?  | In which directory?                                                        |
 | ---- | ----------------- | -------------------------------------------------------------------------- |
-| root | Compute Optimizer controller | ${REMOTE\_DIR}/scripts/latest/ also known as ${SCRIPT\_DEPLOY\_DIR}/latest |
+| root | X-Infrastructure Optimizer controller | ${REMOTE\_DIR}/scripts/latest/ also known as ${SCRIPT\_DEPLOY\_DIR}/latest |
 
 > **Reminder:** `REMOTE_DIR` and `SCRIPT_DEPLOY_DIR` are set in the `onboarding/conf/env.cfg` file.
 
-* Because the cloud offers a theoretically unlimited number of instances or VMs, you can set up a new Compute Optimizer controller without taking any out of production. The new Compute Optimizer controller would only be released to production when it's fully validated. At that stage, a previous Compute Optimizer controller could be removed from production.
-  * In fact, all the replacement Compute Optimizer controllers can be brought online and —once fully validated— pushed into production before any previous Compute Optimizer controllers are removed.
+* Because the cloud offers a theoretically unlimited number of instances or VMs, you can set up a new X-Infrastructure Optimizer controller without taking any out of production. The new X-Infrastructure Optimizer controller would only be released to production when it's fully validated. At that stage, a previous X-Infrastructure Optimizer controller could be removed from production.
+  * In fact, all the replacement X-Infrastructure Optimizer controllers can be brought online and —once fully validated— pushed into production before any previous X-Infrastructure Optimizer controllers are removed.
   * See [Cluster Deployment step above](../../installation-and-configuration/getting-started-with-an-onboarding-tarball/cluster-deployment.md).
-*   If it's not possible to provision a new Compute Optimizer controller, then one of the production Compute Optimizer controllers will need to be idled. Once all jobs have cleared off it, upgrading can begin.
+*   If it's not possible to provision a new X-Infrastructure Optimizer controller, then one of the production X-Infrastructure Optimizer controllers will need to be idled. Once all jobs have cleared off it, upgrading can begin.
 
     ```
     cd ${SCRIPT_DEPLOY_DIR}/latest
@@ -136,6 +136,6 @@ Rolling upgrades or swing migrations make a lot of sense in large environments w
     ... systemd: Started Post Docker Configuration.
     ```
 
-    * In a similar fashion, each subsequent Compute Optimizer controller marked for upgrade can be removed from production, one at a time or in mulitples at a time, while still preserving a limited production capacity of Compute Optimizer controllers while the others are upgraded.
-* Regardless of your approach, (serial replacements or parallel replacements), it would be considered best practice to move through the upgrade process on a single Compute Optimizer controller and fully validate it before moving on to address upgrades in the rest of the fleet of Compute Optimizer controllers.
+    * In a similar fashion, each subsequent X-Infrastructure Optimizer controller marked for upgrade can be removed from production, one at a time or in mulitples at a time, while still preserving a limited production capacity of X-Infrastructure Optimizer controllers while the others are upgraded.
+* Regardless of your approach, (serial replacements or parallel replacements), it would be considered best practice to move through the upgrade process on a single X-Infrastructure Optimizer controller and fully validate it before moving on to address upgrades in the rest of the fleet of X-Infrastructure Optimizer controllers.
 * As noted above, and depending on the scale of the upgrade, creating an AMI may be an efficient way forward.

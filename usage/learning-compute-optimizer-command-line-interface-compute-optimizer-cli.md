@@ -1,4 +1,4 @@
-# Learning Compute Optimizer Command Line Interface (Compute Optimizer CLI)
+# Learning X-Infrastructure Optimizer Command Line Interface (X-Infrastructure Optimizer CLI)
 
 ```
 Usage:
@@ -14,7 +14,7 @@ Usage:
 | Command              | Explanation                                                                                                                       |
 | -------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | `add`                | Add one more worker into the cluster                                                                                              |
-| `check`              | Verify Compute Optimizer prerequisites and installation (default=prereqs only)                                                               |
+| `check`              | Verify X-Infrastructure Optimizer prerequisites and installation (default=prereqs only)                                                               |
 | `console`            | Show console for a sandbox                                                                                                        |
 | `create-vm`          | Creates a VM                                                                                                                      |
 | `help`               | Displays usage information                                                                                                        |
@@ -23,7 +23,7 @@ Usage:
 | `migrate-cancel`     | Cancel on-going migration of a container                                                                                          |
 | `ps`                 | Print out the current status of the system                                                                                        |
 | `regenerate-pricing` | Regenerate a pricing file                                                                                                         |
-| `restart`            | Restart the Compute Optimizer service                                                                                                        |
+| `restart`            | Restart the X-Infrastructure Optimizer service                                                                                                        |
 | `rm`                 | Remove a worker in the cluster                                                                                                    |
 | `rmc`                | Force remove a container                                                                                                          |
 | `rms`                | Deletes a sandbox                                                                                                                 |

@@ -12,17 +12,17 @@ layout:
     visible: true
 ---
 
-# Installing Compute Optimizer Controller on EC2
+# Installing X-Infrastructure Optimizer Controller on EC2
 
 Go to **EC2 > Instances > Launch an instance**
 
-### Step 1: Subscribe to Compute Optimizer Controller <a href="#step-1-subscribe-to-compute-optimizer-controller" id="step-1-subscribe-to-compute-optimizer-controller"></a>
+### Step 1: Subscribe to X-Infrastructure Optimizer Controller <a href="#step-1-subscribe-to-x-infrastructure-optimizer-controller" id="step-1-subscribe-to-x-infrastructure-optimizer-controller"></a>
 
-For **Application and OS Images (Amazon Machine Image)**, search for "compute-optimizer controller".
+For **Application and OS Images (Amazon Machine Image)**, search for "x-infrastructure-optimizer controller".
 
-Under the tab **AWS Marketplace AMIs**, select Exostellar's Compute Optimizer Controller, subscribe, and continue.
+Under the tab **AWS Marketplace AMIs**, select Exostellar's X-Infrastructure Optimizer Controller, subscribe, and continue.
 
-<figure><img src="../../.gitbook/assets/Screenshot 2023-11-10 at 11.23.21 AM.png" alt=""><figcaption><p>Exostellar’s Compute Optimizer Controller Via AWS Marketplace</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/Screenshot 2023-11-10 at 11.23.21 AM.png" alt=""><figcaption><p>Exostellar’s X-Infrastructure Optimizer Controller Via AWS Marketplace</p></figcaption></figure>
 
 {% hint style="warning" %}
 To configure the AMI for IMDSv2:

@@ -2,7 +2,7 @@
 description: Configuring jsv_xspot for AGE
 ---
 
-# Compute Optimizer Integration via JSV for Altair Grid Engine
+# X-Infrastructure Optimizer Integration via JSV for Altair Grid Engine
 
 This document covers the configuration of the AGE job scheduler to rewrite submitted jobs to execute on a controller node running X-spot.
 

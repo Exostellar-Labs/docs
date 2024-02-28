@@ -33,12 +33,12 @@
   6.  We should now have a fresh `onboarding` directory and an archive as follows:
 
       ```
-      [root@compute-optimizer-controller]# ls -la
+      [root@x-infrastructure-optimizer-controller]# ls -la
       drwxr-xr-x   3 root  root    96 Jun 29 13:04 archive
       -rw-r--r--   1 root  root  1172 Jun 29 13:04 custom.diff
       drwxr-xr-x   9 root  root   288 Jun 29 13:04 onboarding
 
-      [root@compute-optimizer-controller]# ls -la archive/
+      [root@x-infrastructure-optimizer-controller]# ls -la archive/
       total 0
       drwxr-xr-x  3 root  root   96 Jun 29 13:04 .
       drwxr-xr-x  5 root  root  160 Jun 29 13:21 ..

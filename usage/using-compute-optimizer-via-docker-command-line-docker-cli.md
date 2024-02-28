@@ -1,7 +1,7 @@
-# Using Compute Optimizer via Docker Command Line (Docker CLI)
+# Using X-Infrastructure Optimizer via Docker Command Line (Docker CLI)
 
 **Start a container**\
-By default, Docker uses `runc` as the runtime. To use Compute Optimizer, add the following parameter to the Docker command line:
+By default, Docker uses `runc` as the runtime. To use X-Infrastructure Optimizer, add the following parameter to the Docker command line:
 
 ```
 docker run --runtime runxc ...

@@ -20,11 +20,11 @@ layout:
 
 | Who? | On which system?  | In which directory? |
 | ---- | ----------------- | ------------------- |
-| root | Compute Optimizer controller | /tmp                |
+| root | X-Infrastructure Optimizer controller | /tmp                |
 
 1. Identify a compute node from the HPC Cluster and prevent jobs from running on it by marking it down, offline, drain, etc.
    * Alternatively, you may proceed with only a single VM but ensure that no workflows are running on it.
-2.  Download the tarball of the latest release of Compute Optimizer via the following command:
+2.  Download the tarball of the latest release of X-Infrastructure Optimizer via the following command:
 
     ```
     wget https://rpm.exostellar.io/download/onboarding.tar
@@ -62,5 +62,5 @@ layout:
          ```
          git commit -m $( cat version )
          ```
-     * We will see more `git` commands later on in the onboarding process, particularly when upgrading for a latest release of Compute Optimizer.
+     * We will see more `git` commands later on in the onboarding process, particularly when upgrading for a latest release of X-Infrastructure Optimizer.
    * We are now ready to begin configuration and installation steps.
